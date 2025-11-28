@@ -161,7 +161,7 @@ onMounted(() => {
             <div class="w-[200px] h-[43px] bg-[url('@/assets/img/6.png')] kt-bg-full"></div>
           </div>
         </div>
-        <div class="absolute top-0 left-0 w-full h-full">
+        <div class="absolute top-0 left-0 w-full h-full pointer-events-auto">
           <div class="w-[700px] h-[151px]">
             <kt-echart v-if="echartsData2" :option="echartsData2" />
           </div>
@@ -171,12 +171,12 @@ onMounted(() => {
       <div class="relative w-full mt-[35px]">
         <div class="absolute top-[10px] left-[60px] w-[38px] h-[38px] bg-[url('@/assets/img/10.png')] kt-bg-full"></div>
         <div class="absolute top-[10px] left-[110px] text-[24px] font-[NotoSansSC]">近期告警趋势分析</div>
-        <div class="flex flex-nowrap gap-[5px] ml-[540px]">
+        <div class="flex flex-nowrap gap-[5px] ml-[540px] pointer-events-auto">
           <div v-for="(item, index) in data.section3['2']" :key="index">
             <div class="w-[48px] h-[28px] kt-bg-full pointer-events-auto" :class="[item.active ? item.bg : item.bg2]"></div>
           </div>
         </div>
-        <div class="w-[700px] h-[290px] -mt-[62px]">
+        <div class="w-[700px] h-[290px] -mt-[62px] pointer-events-auto">
           <kt-echart :option="data.section3.options.option1" ref="chartRef" />
         </div>
       </div>

@@ -19,11 +19,12 @@ import KtWatermark from '@/components/utils-ui/kt-watermark.vue'
 </script>
 
 <template>
-  <KtWatermark :enable="false">
+  <KtWatermark :enable="false" style="pointer-events: none">
     <Layout />
     <!-- <kt-pixel-streaming-player v-if="showPixelStream" /> -->
     <!-- <Scene v-else /> -->
   </KtWatermark>
+  <iframe src="http://127.0.0.1:5500/new3dgs.html" class="absolute bottom-[0px] left-[0px] w-[100%] h-[100%]" frameborder="0"></iframe>
 </template>
 
 <style scoped>

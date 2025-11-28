@@ -104,7 +104,7 @@ const search = () => {
         <div class="text-[48px] text-[#83DAFF] ml-[292px]">{{ data.section2['1'].total }}</div>
         <div class="text-[20px] ml-[7px] mt-[22px]">{{ data.section2['1'].unit }}</div>
       </div>
-      <div class="w-[700px] h-[139px]">
+      <div class="w-[700px] h-[139px] pointer-events-auto">
         <kt-echart :option="data.section2[2].options.option1" />
       </div>
     </div>
@@ -113,7 +113,7 @@ const search = () => {
     <cus-title title="告警列表" position="right" />
 
     <div class="bg-[url('@/assets/img/1.png')] h-[572px] w-[700px] kt-bg-full flex flex-wrap justify-center overflow-hidden">
-      <div class="relative w-[660px] mt-[15px]">
+      <div class="relative w-[660px] mt-[15px] pointer-events-auto">
         <input class="search text-[24px] pl-[16px]" placeholder="请输入关键字" v-model="searchKey" />
         <div class="w-[32px] h-[32px] bg-[url(@/assets/img/33.png)] absolute top-[11px] right-[22px]" @click="search()"></div>
       </div>

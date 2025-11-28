@@ -223,7 +223,7 @@ const changeActive = (index) => {
           </video>
         </div>
       </div>
-      <div class="w-[175px] flex justify-around ml-[260px] mt-[5px]">
+      <div class="w-[175px] flex justify-around ml-[260px] mt-[5px] pointer-events-auto">
         <div v-for="(item, index) in data.section3" key="index">
           <div :class="['w-[23px] h-[10px] kt-bg-full ', item.active ? item.icon1 : item.icon]" @click="changeActive(index)"></div>
         </div>

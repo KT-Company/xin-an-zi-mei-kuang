@@ -139,10 +139,14 @@ const handleLeaveRoam = () => {
 
 <template>
   <!-- 巷道选择 -->
-  <div class="absolute bottom-[141px] left-[767px] w-[208px] h-[56px] bg-[url('@/assets/img/20.png')] z-3" @click="handleAll()">
+  <div class="absolute bottom-[141px] left-[767px] w-[208px] h-[56px] bg-[url('@/assets/img/20.png')] z-3 pointer-events-auto" @click="handleAll()">
     <span class="text-[24px] h-[56px] flex items-center justify-center">全部巷道</span>
   </div>
-  <div v-if="selectedAll" class="absolute bottom-[197px] left-[767px] w-[208px] h-[854px] bg-[url('@/assets/img/17-1.png')]" @mouseleave="handleLeaveRoam()">
+  <div
+    v-if="selectedAll"
+    class="absolute bottom-[197px] left-[767px] w-[208px] h-[854px] bg-[url('@/assets/img/17-1.png')] pointer-events-auto"
+    @mouseleave="handleLeaveRoam()"
+  >
     <div class="flex items-center justify-center flex-col">
       <div v-for="(item, index) in data.roam" :key="index">
         <div

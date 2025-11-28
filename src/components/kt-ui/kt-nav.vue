@@ -252,10 +252,10 @@ watchEffect(() => {
       </el-carousel>
     </div>
   </nav>
-  <div class="absolute bottom-[55px] left-[1170px] w-[265px] h-[58px] bg-[url('@/assets/img/17.png')] z-3" @click="handleRoamClick()">
+  <div class="absolute bottom-[55px] left-[1170px] w-[265px] h-[58px] bg-[url('@/assets/img/17.png')] z-3 pointer-events-auto" @click="handleRoamClick()">
     <span class="text-[28px] pl-[49px] pt-[5px]">场景漫游</span>
   </div>
-  <div v-if="selectedRoam" class="absolute bottom-[113px] left-[1220px] w-[208px] h-[404px] bg-[url('@/assets/img/17-1.png')]">
+  <div v-if="selectedRoam" class="absolute bottom-[113px] left-[1220px] w-[208px] h-[404px] bg-[url('@/assets/img/17-1.png')] pointer-events-auto">
     <div class="flex items-center justify-center flex-col">
       <div v-for="(item, index) in data.roam" :key="index">
         <div class="w-[202px] h-[50px] flex justify-center items-center text-[24px]" :class="[item.active ? item.bg : '']" @click="handleSelectRoam(index)">
@@ -264,13 +264,13 @@ watchEffect(() => {
       </div>
     </div>
   </div>
-  <div class="absolute bottom-[55px] left-[2934px] w-[265px] h-[58px] bg-[url('@/assets/img/18-1.png')] z-3" v-if="selectedFactory">
+  <div class="absolute bottom-[55px] left-[2934px] w-[265px] h-[58px] bg-[url('@/assets/img/18-1.png')] z-3 pointer-events-auto" v-if="selectedFactory">
     <span class="text-[28px] pl-[106px] pt-[5px]" @click="handleMineClick()">矿下场景</span>
   </div>
   <!-- <div class="absolute bottom-[158px] left-[2934px] w-[265px] h-[58px] bg-[url('@/assets/img/18-2.png')] z-3" v-if="selectedFactory">
     <span class="text-[28px] pl-[106px] pt-[5px]" @click="handleFactoryClick()">厂区场景</span>
   </div> -->
-  <div class="absolute bottom-[60px] left-[2934px] w-[265px] h-[58px] bg-[url('@/assets/img/18-2.png')] z-3" v-if="selectedMine">
+  <div class="absolute bottom-[60px] left-[2934px] w-[265px] h-[58px] bg-[url('@/assets/img/18-2.png')] z-3 pointer-events-auto" v-if="selectedMine">
     <span class="text-[28px] pl-[106px] pt-[5px]" @click="handleFactoryClick()">厂区场景</span>
   </div>
 </template>

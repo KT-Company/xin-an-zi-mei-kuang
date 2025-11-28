@@ -113,7 +113,7 @@ const data = ref({
         <div class="absolute left-[20px] w-[38px] h-[38px] bg-[url('@/assets/img/10.png')] kt-bg-full"></div>
         <div class="absolute left-[60px] text-[24px] font-[NotoSansSC]">井下当天空气质量</div>
       </div>
-      <div class="w-[700px] h-[252px]">
+      <div class="w-[700px] h-[252px] pointer-events-auto">
         <kt-echart :option="data.section1[2].options.option1" />
       </div>
     </div>
