@@ -1,6 +1,7 @@
 import ue, { ue5 } from "./linkUE";
 import mitt from "mitt";
 import { onBeforeUnmount } from "vue";
+import { CACHE } from '@/ktJS/CACHE'
 
 export const emitter = mitt();
 
@@ -13,19 +14,27 @@ let connectPixel = false;
  * @param {*} data {text:1}
  */
 export const sendToUE = (type, data = {}) => {
+  // const params = {
+  //   type,
+  //   data,
+  // };
+  // connectPixel = true;
+  // // console.log(connectPixel, 'connectPixel')
+  // if (connectPixel) {
+  //   emitter.emit("send-pixel-msg", params); // 发送数据到像素流
+  //   console.log("web发送数据到像素流-->", params);
+  // } else {
+  //   ue5("WebToUE", params); // 发送数据到UE客户端
+  //   console.log("web发送数据到UE客户端-->", params);
+  // }
+
   const params = {
     type,
     data,
-  };
-  connectPixel = false;
-  // console.log(connectPixel, 'connectPixel')
-  if (connectPixel) {
-    emitter.emit("send-pixel-msg", params); // 发送数据到像素流
-    console.log("web发送数据到像素流-->", params);
-  } else {
-    ue5("WebToUE", params); // 发送数据到UE客户端
-    console.log("web发送数据到UE客户端-->", params);
   }
+  console.log('WebToUE --web发送到UE数据-->', params)
+  ue5('WebToUE', params)
+  CACHE.pixelStream?.stream?.emitUIInteraction(params)
 };
 
 // 提供给UE调用的接口

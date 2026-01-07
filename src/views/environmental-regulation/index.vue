@@ -77,8 +77,8 @@ const handleSelect = (index) => {
 </script>
 
 <template>
-  <comLeft />
-  <comRight />
+  <comLeft class="z-2" />
+  <comRight class="z-2" />
   <div class="absolute top-[147px] left-[767px] w-[282px] h-auto bg-[url('@/assets/img/17-1.png')] kt-bg-full z-3 pointer-events-auto">
     <div v-for="(item, index) in data.left1" key="index" @click="handleSelect(index)">
       <div class="w-[272px] h-[56px] kt-bg-full flex items-center justify-center" :class="[item.active ? item.bg2 : item.bg1]">

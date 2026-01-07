@@ -52,4 +52,37 @@ const props = defineProps({
     }
   }
 }
+.s2 {
+  :deep(.kt-table) {
+    font-size: 20px;
+
+    .kt-table-header {
+      font-size: 20px;
+      height: 31px;
+      color: #62efd3;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      // background-image: url('@/assets/img/table/1-title.png');
+      span {
+        margin-bottom: 2px;
+      }
+    }
+    .kt-table-content > .kt-table-row {
+      position: relative;
+      align-items: center;
+      font-size: 24px;
+      height: 48px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      &:nth-child(2n) {
+        background-image: url('@/assets/img/table/1-1.png');
+      }
+      &:nth-child(2n + 1) {
+        background-image: url('@/assets/img/table/1-2.png');
+      }
+    }
+  }
+}
 </style>

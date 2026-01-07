@@ -2,16 +2,17 @@
 import cusTitle from '@/components/my-ui/cus-title.vue'
 import ktTable from '@/components/my-ui/kt-table.vue'
 import cusPjTable from '@/components/my-ui/cus-pj-table.vue'
+import { getGroupStatus } from '@/axios/production-management'
 
 const data = ref({
   section1: {
     1: {
-      考勤率: {
-        name: '考勤率',
-        value: 94,
-        unit: '%',
-        bg: 'bg-[url(@/assets/img/27-1.png)]',
-      },
+      // 考勤率: {
+      //   name: '考勤率',
+      //   value: 94,
+      //   unit: '%',
+      //   bg: 'bg-[url(@/assets/img/27-1.png)]',
+      // },
       出勤率: {
         name: '出勤率',
         value: 94,
@@ -100,6 +101,18 @@ const data = ref({
     },
   },
 })
+
+const GroupStatus = async () => {
+  const res = await getGroupStatus({})
+  console.log(res)
+  if (res.data.code === 200) {
+    const { dailyGroupRealNum, dailyGroupPlanNum } = res.data.data
+    data.value.section1['1']['出勤率'].value = ((dailyGroupRealNum / dailyGroupPlanNum) * 100).toFixed(0)
+    // data.value.section1[1].考勤率.value = attendanceRate
+  }
+}
+
+GroupStatus()
 </script>
 <template>
   <div class="w-[700px] top-[117px] right-[44px] absolute flex flex-col">

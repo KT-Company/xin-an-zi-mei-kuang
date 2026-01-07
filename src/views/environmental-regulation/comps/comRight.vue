@@ -5,6 +5,7 @@ import cusPjTable from '@/components/my-ui/cus-pj-table.vue'
 import { createOption2 } from './createOption'
 import cusTable2 from '@/components/my-ui/cus-table2.vue'
 import ktAnimeScroll from '@/components/kt-ui/kt-anime-scroll.vue'
+import { getAlarmList } from '@/axios/environmental-regulation'
 
 const data = ref({
   section1: {
@@ -29,58 +30,128 @@ const data = ref({
       },
     },
   },
-  section3: {
-    1: {
-      content: '15103采面上隅角-温度超标，当前监测为为...',
-      local: 'XXXXXXXXXXX',
+  section3: [
+    {
+      content: 'XXXX设备',
+      alarmValue: '15.0',
+      limitValue: '20.0',
+      envFactor: 'PM10',
       time: '2025年9月24日 14:45:34',
-      status: '已完成',
+      status: '超下限',
     },
-    2: {
-      content: '15103采面上隅角-温度超标，当前监测为为...',
-      local: 'XXXXXXXXXXX',
+    {
+      content: 'XXXX设备',
+      alarmValue: '25.0',
+      limitValue: '20.0',
+      envFactor: 'PM10',
       time: '2025年9月24日 14:45:34',
-      status: '待处理',
+      status: '超上限',
     },
-    3: {
-      content: '15103采面上隅角-温度超标，当前监测为为...',
-      local: 'XXXXXXXXXXX',
+    {
+      content: 'XXXX设备',
+      alarmValue: '15.0',
+      limitValue: '20.0',
+      envFactor: 'PM10',
       time: '2025年9月24日 14:45:34',
-      status: '已完成',
+      status: '离线报警',
     },
-    4: {
-      content: '15103采面上隅角-温度超标，当前监测为为...',
-      local: 'XXXXXXXXXXX',
+    {
+      content: 'XXXX设备',
+      alarmValue: '15.0',
+      limitValue: '20.0',
+      envFactor: 'PM10',
       time: '2025年9月24日 14:45:34',
-      status: '已完成',
+      status: '超下限',
     },
-    5: {
-      content: '15102采面上隅角-温度超标，当前监测为为...',
-      local: '重庆',
+    {
+      content: 'aaa设备',
+      alarmValue: '15.0',
+      limitValue: '20.0',
+      envFactor: '重庆',
       time: '2025年10月24日 14:45:34',
-      status: '已完成',
+      status: '超下限',
     },
-  },
+  ],
+  // section3: {
+  //   1: {
+  //     content: '15103采面上隅角-温度超标，当前监测为为...',
+  //     local: 'XXXXXXXXXXX',
+  //     time: '2025年9月24日 14:45:34',
+  //     status: '已完成',
+  //   },
+  //   2: {
+  //     content: '15103采面上隅角-温度超标，当前监测为为...',
+  //     local: 'XXXXXXXXXXX',
+  //     time: '2025年9月24日 14:45:34',
+  //     status: '待处理',
+  //   },
+  //   3: {
+  //     content: '15103采面上隅角-温度超标，当前监测为为...',
+  //     local: 'XXXXXXXXXXX',
+  //     time: '2025年9月24日 14:45:34',
+  //     status: '已完成',
+  //   },
+  //   4: {
+  //     content: '15103采面上隅角-温度超标，当前监测为为...',
+  //     local: 'XXXXXXXXXXX',
+  //     time: '2025年9月24日 14:45:34',
+  //     status: '已完成',
+  //   },
+  //   5: {
+  //     content: '15102采面上隅角-温度超标，当前监测为为...',
+  //     local: '重庆',
+  //     time: '2025年10月24日 14:45:34',
+  //     status: '已完成',
+  //   },
+  // },
 })
 
 const searchKey = ref('')
 const scrollRef = ref(null)
+
+// const filteredList = computed(() => {
+//   const key = searchKey.value.trim()
+//   if (!key) return Object.values(data.value.section3)
+
+//   return Object.values(data.value.section3).filter((item) => {
+//     return item.content.includes(key) || item.local.includes(key) || item.time.includes(key)
+//   })
+// })
 
 const filteredList = computed(() => {
   const key = searchKey.value.trim()
   if (!key) return Object.values(data.value.section3)
 
   return Object.values(data.value.section3).filter((item) => {
-    return item.content.includes(key) || item.local.includes(key) || item.time.includes(key)
+    return item.content.includes(key) || item.envFactor.includes(key) || item.time.includes(key)
   })
 })
-
 const search = () => {
   nextTick(() => {
     scrollRef.value?.reset()
   })
   console.log(filteredList.value)
 }
+
+const alarmList = async () => {
+  const res = await getAlarmList()
+  console.log('11111111111111111111', res)
+  if (res.code === 200) {
+    const result = res.data.data
+    data.value.section3 = result.map((item) => {
+      const { deviceName, factor, alarmType, alarmValue, limitValue, strtime } = item
+      return {
+        content: deviceName,
+        alarmValue: alarmValue,
+        limitValue: limitValue,
+        envFactor: factor,
+        time: strtime,
+        status: alarmType === 1 ? '离线报警' : alarmType === 2 ? '超上限' : '超下限',
+      }
+    })
+  }
+}
+alarmList()
 </script>
 <template>
   <div class="w-[700px] top-[117px] right-[44px] absolute flex flex-col">
@@ -115,12 +186,12 @@ const search = () => {
     <div class="bg-[url('@/assets/img/1.png')] h-[572px] w-[700px] kt-bg-full flex flex-wrap justify-center overflow-hidden">
       <div class="relative w-[660px] mt-[15px] pointer-events-auto">
         <input class="search text-[24px] pl-[16px]" placeholder="请输入关键字" v-model="searchKey" />
-        <div class="w-[32px] h-[32px] bg-[url(@/assets/img/33.png)] absolute top-[11px] right-[22px]" @click="search()"></div>
+        <div class="w-[32px] h-[32px] bg-[url('@/assets/img/33.png')] absolute top-[11px] right-[22px]" @click="search()"></div>
       </div>
       <!-- 自动滚动区域 -->
       <div class="w-full h-[453px] ml-[20px] mt-[22px] mb-[28px]">
         <ktAnimeScroll ref="scrollRef">
-          <div v-for="(item, index) in filteredList" :key="index">
+          <!-- <div v-for="(item, index) in filteredList" :key="index">
             <div
               class="w-[649px] h-[141px] mt-[20px] flex flex-wrap"
               :class="[item.status === '已完成' ? 'bg-[url(@/assets/img/32-1.png)]' : 'bg-[url(@/assets/img/32-2.png)]']"
@@ -130,6 +201,38 @@ const search = () => {
               </div>
               <div class="text-[20px] ml-[64px] w-full h-[24px]">地点：{{ item.local }}</div>
               <div class="text-[20px] ml-[64px] w-full h-[24px]">时间：{{ item.time }}</div>
+            </div>
+          </div> -->
+          <div v-for="(item, index) in filteredList" :key="index">
+            <div
+              class="w-[649px] h-[141px] mt-[20px] flex flex-wrap relative"
+              :class="[
+                item.status === '超下限'
+                  ? 'bg-[url(@/assets/img/35-1.png)]'
+                  : item.status === '超上限'
+                  ? 'bg-[url(@/assets/img/35-2.png)]'
+                  : 'bg-[url(@/assets/img/35-3.png)]',
+              ]"
+            >
+              <div class="ml-[64px] text-[24px] h-[50px] flex items-center">
+                {{ item.content }}
+              </div>
+              <span class="absolute top-[9px] right-[204px] text-[24px] font-[NotoSansSC]">{{ item.status }}</span>
+              <span class="absolute top-[42px] right-[43px] text-[20px] font-[NotoSansSC]">报警值</span>
+              <span class="absolute top-[69px] left-[525px] w-[100px] flex justify-center items-center">
+                <span class="text-[24px] text-[#83DAFF]">{{ item.alarmValue }}</span>
+                <span class="text-[20px] text-white">/</span>
+                <span class="text-[18px] text-white">{{ item.limitValue }}</span></span
+              >
+              <div class="text-[20px] ml-[64px] w-full h-[24px] flex items-center">
+                <img src="@/assets/img/35-4.png" class="w-[20px] h-[18px]" alt="" />
+                <span class="ml-[17px]"> 环境因子：{{ item.envFactor }} </span>
+              </div>
+              <div class="text-[20px] ml-[64px] w-full h-[24px] flex items-center">
+                <img src="@/assets/img/35-5.png" class="w-[20px] h-[18px]" alt="" />
+                <span class="ml-[17px]"> 时间：{{ item.time }} </span>
+              </div>
+              <!-- <div class="text-[20px] ml-[64px] w-full h-[24px]">时间：{{ item.time }}</div> -->
             </div>
           </div>
         </ktAnimeScroll>

@@ -2,6 +2,7 @@
 import cusTitle from '@/components/my-ui/cus-title.vue'
 import KtEchart from '@/components/utils-ui/kt-echart.vue'
 import { createOption1 } from './createOption'
+import { getEnvMonitoring } from '@/axios/environmental-regulation'
 
 const data = ref({
   section1: {
@@ -26,8 +27,158 @@ const data = ref({
       },
     },
     2: {
-      options: {
-        option1: createOption1(),
+      // options: {
+      //   option1: createOption1(),
+      // },
+      风速: {
+        name: '风速',
+        active: true,
+        bg: 'bg-[url(@/assets/img/7-1.png)]',
+        bg2: 'bg-[url(@/assets/img/7-2.png)]',
+        columns: [
+          {
+            label: '设备',
+            prop: 'k1',
+            dir: 'left',
+            width: 1,
+          },
+          {
+            label: '风速',
+            prop: 'k2',
+            dir: 'right',
+            width: 1,
+          },
+        ],
+        data: [
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+        ],
+      },
+      一氧化碳: {
+        name: '一氧化碳',
+        active: false,
+        bg: 'bg-[url(@/assets/img/7-1.png)]',
+        bg2: 'bg-[url(@/assets/img/7-2.png)]',
+        columns: [
+          {
+            label: '设备',
+            prop: 'k1',
+            dir: 'left',
+            width: 1,
+          },
+          {
+            label: '一氧化碳',
+            prop: 'k2',
+            dir: 'right',
+            width: 1,
+          },
+        ],
+        data: [
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+        ],
+      },
+      温度: {
+        name: '温度',
+        active: false,
+        bg: 'bg-[url(@/assets/img/7-1.png)]',
+        bg2: 'bg-[url(@/assets/img/7-2.png)]',
+        columns: [
+          {
+            label: '设备',
+            prop: 'k1',
+            dir: 'left',
+            width: 1,
+          },
+          {
+            label: '温度',
+            prop: 'k2',
+            dir: 'right',
+            width: 1,
+          },
+        ],
+        data: [
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+          {
+            k1: 'xxx',
+            k2: 'XXX',
+          },
+        ],
       },
     },
   },
@@ -88,6 +239,59 @@ const data = ref({
     },
   },
 })
+const select = ref('风速')
+
+const handleSelect = (index) => {
+  Object.keys(data.value.section1['2']).forEach((key) => {
+    data.value.section1['2'][key].active = key === index
+  })
+  select.value = index
+}
+
+const splitTableData = (table) => {
+  const mid = Math.ceil(table.length / 2)
+  const firstHalf = table.slice(0, mid)
+  const secondHalf = table.slice(mid)
+  return [firstHalf, secondHalf]
+}
+//获取环境监测数据
+const EnvMonitoring = async () => {
+  const res = await getEnvMonitoring()
+  console.log(res)
+  console.log(res)
+  if (res.data.code === 200) {
+    const result = res.data.data
+    result.forEach((item) => {
+      const { pm25, pm10, tsp } = item
+      data.value.section1[1]['PM 2.5'].value = pm25
+      data.value.section1[1]['PM 10'].value = pm10
+      data.value.section1[1]['粉尘浓度'].value = tsp
+    })
+    data.value.section1[2]['风速'].data = result.map((item) => {
+      const { deviceId, ws } = item
+      return {
+        k1: deviceId,
+        k2: ws,
+      }
+    })
+    data.value.section1[2]['一氧化碳'].data = result.map((item) => {
+      const { deviceId, co } = item
+      return {
+        k1: deviceId,
+        k2: co,
+      }
+    })
+    data.value.section1[2]['温度'].data = result.map((item) => {
+      const { deviceId, tem } = item
+      return {
+        k1: deviceId,
+        k2: tem,
+      }
+    })
+  }
+}
+
+EnvMonitoring()
 </script>
 <template>
   <div class="w-[700px] top-[117px] left-[44px] absolute flex flex-col">
@@ -113,9 +317,32 @@ const data = ref({
         <div class="absolute left-[20px] w-[38px] h-[38px] bg-[url('@/assets/img/10.png')] kt-bg-full"></div>
         <div class="absolute left-[60px] text-[24px] font-[NotoSansSC]">井下当天空气质量</div>
       </div>
-      <div class="w-[700px] h-[252px] pointer-events-auto">
-        <kt-echart :option="data.section1[2].options.option1" />
+      <div class="flex flex-nowrap gap-[5px] ml-[386px] pointer-events-auto">
+        <div v-for="(item, index) in data.section1['2']" :key="index">
+          <div
+            class="w-[96px] h-[28px] kt-bg-full pointer-events-auto flex justify-center items-center"
+            :class="[item.active ? item.bg : item.bg2]"
+            @click="handleSelect(index)"
+          >
+            <span class="text-[20px]">{{ item.name }}</span>
+          </div>
+        </div>
       </div>
+      <!-- <div class="bg-[url('@/assets/img/1.png')] h-[312px] w-[700px] kt-bg-full"> -->
+      <div class="flex w-full">
+        <div class="w-[325px] h-[222px] ml-[21px] mt-[14px]">
+          <cus-pj-table :columns="data.section1['2'][select].columns" :data="splitTableData(data.section1['2'][select].data)[0]" gap="4px" sl="s2">
+          </cus-pj-table>
+        </div>
+        <div class="w-[325px] h-[222px] ml-[21px] mt-[14px]">
+          <cus-pj-table :columns="data.section1['2'][select].columns" :data="splitTableData(data.section1['2'][select].data)[1]" gap="4px" sl="s2">
+          </cus-pj-table>
+        </div>
+      </div>
+      <!-- </div> -->
+      <!-- <div class="w-[700px] h-[252px] pointer-events-auto">
+        <kt-echart :option="data.section1[2].options.option1" />
+      </div> -->
     </div>
     <!-- 传感器设备总量统计 -->
     <cus-title title="传感器设备总量统计" position="left" />

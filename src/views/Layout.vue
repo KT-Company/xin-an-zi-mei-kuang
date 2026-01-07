@@ -49,12 +49,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="text-white" id="app-main">
+  <div class="text-white z-99" id="app-main">
     <!-- <KtNav /> -->
     <!-- <KtTimer /> -->
-    <div class="kt-full absolute top-0 left-0 bg-[url('@/assets/img/bg/bg.png')] kt-bg-full"></div>
-    <div class="kt-full absolute top-0 left-0 bg-[url('@/assets/img/bg/bg-1.png')] kt-bg-full"></div>
-    <div class="absolute top-[39px] left-[1748px] w-[873px] h-[122px] bg-[url('@/assets/img/bg/title.png')] kt-bg-full"></div>
+    <div class="kt-full absolute top-0 left-0 bg-[url('@/assets/img/bg/bg.png')] kt-bg-full z-1"></div>
+    <div class="kt-full absolute top-0 left-0 bg-[url('@/assets/img/bg/bg-1.png')] kt-bg-full z-1"></div>
+    <div class="absolute top-[39px] left-[1748px] w-[873px] h-[122px] bg-[url('@/assets/img/bg/title.png')] kt-bg-full z-1"></div>
     <!-- <div class="kt-bg-gradient2 absolute font-[Source-Han-Sans-CN] font-bold text-[54px] kt-x-center top-[56px] tracking-[4px]">
       章源钨业新安子矿业综合管控平台
     </div> -->

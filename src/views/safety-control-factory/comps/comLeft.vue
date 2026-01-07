@@ -2,7 +2,57 @@
 import cusTitle from '@/components/my-ui/cus-title.vue'
 import KtEchart from '@/components/utils-ui/kt-echart.vue'
 import { panel, pie, createOption1 } from './createOption'
+import { getMonitoringAndAlarming, getDeviceSafetyInspection, getPotentialRiskRectification } from '@/axios/safety-control-factory'
 
+const select = ref(0)
+const dateType = ref('day')
+const rawData = ref({
+  天: [
+    { date: '0', value: '75' },
+    { date: '4', value: '125' },
+    { date: '8', value: '75' },
+    { date: '12', value: '60' },
+    { date: '16', value: '175' },
+    { date: '20', value: '265' },
+  ],
+  周: [
+    { date: '0', value: '100' },
+    { date: '4', value: '150' },
+    { date: '8', value: '120' },
+    { date: '12', value: '80' },
+    { date: '16', value: '200' },
+    { date: '20', value: '300' },
+  ],
+  月: [
+    { date: '0', value: '110' },
+    { date: '4', value: '160' },
+    { date: '8', value: '170' },
+    { date: '12', value: '180' },
+    { date: '16', value: '10' },
+    { date: '20', value: '150' },
+  ],
+})
+
+const tabs = ref([
+  {
+    name: '天',
+    active: true,
+    bg: 'bg-[url(@/assets/img/7-1.png)]',
+    bg2: 'bg-[url(@/assets/img/7-2.png)]',
+  },
+  {
+    name: '周',
+    active: false,
+    bg: 'bg-[url(@/assets/img/7-1.png)]',
+    bg2: 'bg-[url(@/assets/img/7-2.png)]',
+  },
+  {
+    name: '月',
+    active: false,
+    bg: 'bg-[url(@/assets/img/7-1.png)]',
+    bg2: 'bg-[url(@/assets/img/7-2.png)]',
+  },
+])
 const data = ref({
   section1: {
     1: {
@@ -19,13 +69,13 @@ const data = ref({
       },
       设备停机: {
         name: '设备停机',
-        total: 698,
+        total: 0,
         unit: '个',
         textColor: '#FFB348',
       },
       设备故障: {
         name: '设备故障',
-        total: 33,
+        total: 0,
         unit: '个',
         textColor: '#FF6969',
       },
@@ -34,7 +84,7 @@ const data = ref({
   section2: {
     隐患总数: {
       name: '隐患总数',
-      total: 2121,
+      total: 0,
       textColor: '#FFB348',
       img: 'bg-[url(@/assets/img/5-1.png)]',
     },
@@ -56,54 +106,181 @@ const data = ref({
         { name: '中毒窒息', value: '12' },
       ],
     },
-    options: {
-      option1: createOption1(),
-    },
-    2: {
-      天: {
-        name: '天',
-        active: true,
-        bg: 'bg-[url(@/assets/img/7-1.png)]',
-        bg2: 'bg-[url(@/assets/img/7-2.png)]',
-      },
-      周: {
-        name: '周',
-        active: false,
-        bg: 'bg-[url(@/assets/img/7-1.png)]',
-        bg2: 'bg-[url(@/assets/img/7-2.png)]',
-      },
-      月: {
-        name: '月',
-        active: false,
-        bg: 'bg-[url(@/assets/img/7-1.png)]',
-        bg2: 'bg-[url(@/assets/img/7-2.png)]',
-      },
-    },
+    // options: {
+    //   option1: createOption1({
+    //     rawData: rawData[tabs.value[select.value].name], // 使用模拟数据
+    //     // color: ,
+    //     label: tabs.value[select.value].name,
+    //   }),
+    // },
+    2: {},
   },
 })
+
+// 计算属性：获取当前选中的选项卡名称
+const currentTabName = computed(() => {
+  return tabs.value[select.value]?.name || '天'
+})
+
+// 计算属性：获取当前选项卡对应的数据
+const currentChartData = computed(() => {
+  return rawData.value[currentTabName.value] || []
+})
+
+// 计算属性：动态生成图表配置
+const chartOption = computed(() => {
+  return createOption1({
+    rawData: currentChartData.value,
+    label: currentTabName.value,
+  })
+})
+const getDateType = () => {
+  if (currentTabName.value === '天') return 'day'
+  if (currentTabName.value === '周') return 'week'
+  return 'month'
+}
+const handleSelect = (index) => {
+  tabs.value.forEach((tab, i) => {
+    tab.active = i === index
+  })
+  select.value = index
+  // 不需要手动更新option，因为chartOption是计算属性，会自动更新
+}
 
 let echartsData1 = ref({})
 let echartsData2 = ref({})
 const chartRef = ref(null)
 
-onMounted(() => {
-  nextTick(() => {
-    const chartInstance = chartRef.value?.chart // ✅ 获取 ECharts 实例
+// 监控与告警
 
-    // 监听图例切换事件
-    chartInstance.on('legendselectchanged', (params) => {
-      const clickedName = params.name // "天"、"周"、"月"
-      // 更新按钮背景状态
-      Object.keys(data.value.section3['2']).forEach((key) => {
-        data.value.section3['2'][key].active = key === clickedName
+const MonitoringAndAlarming = async () => {
+  const dateType = getDateType() // 获取当前选中的类型
+  console.log('请求数据类型:', dateType)
+
+  const res = await getMonitoringAndAlarming({ dateType })
+  console.log('监控与告警数据:', res)
+
+  if (res.data.code === 200) {
+    const result = res.data.data
+
+    // 1. 处理告警统计
+    data.value.section3[1].data = []
+    if (result.alarmStatistics && result.alarmStatistics.length <= 6) {
+      data.value.section3[1].data = result.alarmStatistics.map((item) => ({
+        name: item.securityIncidentType,
+        value: item.alarmNum,
+      }))
+      // 更新饼图
+      echartsData2.value = pie(data.value.section3[1].data)
+    }
+
+    // 2. 只更新当前选中的数据类型
+    if (result.statistics && result.statistics.length > 0) {
+      // 清空当前类型的数据
+      rawData.value[currentTabName.value] = []
+
+      // 根据当前类型筛选数据
+      result.statistics.forEach((item) => {
+        if (dateType === 'day' && item.hour !== null) {
+          rawData.value['天'].push({
+            date: String(item.hour),
+            value: item.num,
+          })
+        } else if (dateType === 'week' && item.weekDay !== null) {
+          rawData.value['周'].push({
+            date: String(item.weekDay),
+            value: item.num,
+          })
+        } else if (dateType === 'month' && item.monthDay !== null) {
+          rawData.value['月'].push({
+            date: String(item.monthDay),
+            value: item.num,
+          })
+        }
       })
+
+      console.log(`更新 ${currentTabName.value} 数据:`, rawData.value[currentTabName.value])
+    }
+  }
+}
+// 设备安全检测
+
+const DeviceSafetyInspection = async () => {
+  const res = await getDeviceSafetyInspection({})
+  console.log('3333333333333333333', res)
+  if (res.data.code === 200) {
+    const result = res.data.data
+    result.forEach((item) => {
+      const { totalNum, activateNum, shutdownNum, faultNum } = item
+      data.value.section1['1'].total = totalNum
+      data.value.section1['2']['设备开机'].total = activateNum
+      data.value.section1['2']['设备停机'].total = shutdownNum
+      data.value.section1['2']['设备故障'].total = faultNum
     })
-  })
-})
+  }
+}
+// 隐患整治
+const PotentialRiskRectification = async () => {
+  const res = await getPotentialRiskRectification({})
+  console.log('4444444444444444444', res)
+  if (res.data.code === 200) {
+    const result = res.data.data
+    result.forEach((item) => {
+      // const { potentialNum, inspectionNum } = item
+      data.value.section2['隐患总数'].total = item.potentialNum
+      data.value.section2['已验收数'].total = item.inspectionNum
+      console.log(item, item.potentialNum, item.inspectionNum)
+    })
+  }
+}
+
+// const Leakage = async () => {
+//   const res = await getLeakage({})
+//   if (res.status === 200) {
+//     console.log(res.data)
+//   }
+// }
+// Leakage()
+// onMounted(() => {
+//   nextTick(() => {
+//     const chartInstance = chartRef.value?.chart // ✅ 获取 ECharts 实例
+
+//     // 监听图例切换事件
+//     chartInstance.on('legendselectchanged', (params) => {
+//       const clickedName = params.name // "天"、"周"、"月"
+//       console.log('Clicked legend name:', clickedName)
+//       // 更新按钮背景状态
+//       Object.keys(data.value.section3['2']).forEach((key) => {
+//         data.value.section3['2'][key].active = key === clickedName
+//       })
+
+//       if (select.value === 0) {
+//         rawData.value = dayRawData.value
+//         console.log(dayRawData.value)
+//       } else if (select.value === 1) {
+//         rawData.value = weekRawData.value
+//         console.log(weekRawData.value)
+//       } else if (select.value === 2) {
+//         rawData.value = monthRawData.value
+//         console.log(monthRawData.value)
+//       }
+
+//       // data.value.section3.options.option1 = createOption1(rawData.value)
+//     })
+//   })
+// })
 
 onMounted(() => {
   echartsData1.value = panel(2.5, 5)
   echartsData2.value = pie(data.value.section3['1'].data)
+  MonitoringAndAlarming()
+  PotentialRiskRectification()
+  DeviceSafetyInspection()
+})
+
+// MonitoringAndAlarming()
+watch(select, () => {
+  MonitoringAndAlarming()
 })
 </script>
 <template>
@@ -152,32 +329,46 @@ onMounted(() => {
     </div>
     <!-- 监控与告警 -->
     <cus-title title="监控与告警" position="left" />
-    <div class="bg-[url('@/assets/img/1.png')] h-[492px] w-[700px] kt-bg-full flex flex-col items-center justify-center relative">
-      <!--第一部分 -->
-      <div class="relative w-full">
+    <div class="bg-[url('@/assets/img/1.png')] w-[700px] kt-bg-full flex flex-col gap-[20px] h-[492px]">
+      <!-- 第一部分 -->
+      <div class="relative w-full h-[151px] mt-[24px]">
         <div class="absolute top-[47px] left-[110px] w-[38px] h-[38px] bg-[url('@/assets/img/11.png')] kt-bg-full"></div>
-        <div class="grid grid-cols-2 grid-rows-3 gap-y-[3px] gap-x-[33px] ml-[231px]">
+
+        <div class="grid grid-cols-2 grid-rows-3 grid-flow-col gap-y-[3px] gap-x-[33px] ml-[231px] h-full">
           <div v-for="(item, index) in data.section3['1'].data" :key="index">
             <div class="w-[200px] h-[43px] bg-[url('@/assets/img/6.png')] kt-bg-full"></div>
           </div>
         </div>
-        <div class="absolute top-0 left-0 w-full h-full pointer-events-auto">
-          <div class="w-[700px] h-[151px]">
-            <kt-echart v-if="echartsData2" :option="echartsData2" />
-          </div>
+
+        <div class="absolute inset-0 pointer-events-auto">
+          <kt-echart :option="echartsData2" />
         </div>
       </div>
-      <!--第二部分 -->
-      <div class="relative w-full mt-[35px]">
-        <div class="absolute top-[10px] left-[60px] w-[38px] h-[38px] bg-[url('@/assets/img/10.png')] kt-bg-full"></div>
-        <div class="absolute top-[10px] left-[110px] text-[24px] font-[NotoSansSC]">近期告警趋势分析</div>
-        <div class="flex flex-nowrap gap-[5px] ml-[540px] pointer-events-auto">
-          <div v-for="(item, index) in data.section3['2']" :key="index">
-            <div class="w-[48px] h-[28px] kt-bg-full pointer-events-auto" :class="[item.active ? item.bg : item.bg2]"></div>
+
+      <!-- 第二部分 -->
+      <div class="w-full flex flex-col gap-[12px]">
+        <!-- 标题 -->
+        <div class="flex w-full ml-[20px]">
+          <div class="w-[38px] h-[38px] bg-[url('@/assets/img/10.png')] kt-bg-full"></div>
+          <span class="text-[24px] font-[NotoSansSC]">近期告警趋势分析</span>
+        </div>
+
+        <!-- tabs -->
+        <div class="flex flex-nowrap gap-[5px] ml-[520px] pointer-events-auto z-10">
+          <div v-for="(item, index) in tabs" :key="index">
+            <div
+              class="w-[48px] h-[28px] kt-bg-full pointer-events-auto flex justify-center items-center cursor-pointer hover:opacity-90"
+              :class="[item.active ? item.bg : item.bg2]"
+              @click="handleSelect(index)"
+            >
+              <span class="text-[20px]">{{ item.name }}</span>
+            </div>
           </div>
         </div>
-        <div class="w-[700px] h-[290px] -mt-[62px] pointer-events-auto">
-          <kt-echart :option="data.section3.options.option1" ref="chartRef" />
+
+        <!-- 折线图 -->
+        <div class="w-[700px] h-[290px] mt-[-70px]">
+          <kt-echart :option="chartOption" />
         </div>
       </div>
     </div>

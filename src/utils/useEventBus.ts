@@ -75,7 +75,7 @@ export function sendToUE(type: string, data: Record<string, unknown> = {}) {
   }
   console.log('WebToUE --web发送到UE数据-->', params)
   ue5('WebToUE', params)
-  ;(CACHE.pixelStream as any)?.stream?.emitUIInteraction(params)
+  CACHE.pixelStream?.stream?.emitUIInteraction(params)
 }
 
 /**

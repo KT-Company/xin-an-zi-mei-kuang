@@ -2,6 +2,7 @@
 import cusTitle from '@/components/my-ui/cus-title.vue'
 import KtEchart from '@/components/utils-ui/kt-echart.vue'
 import { panel } from './createOption'
+import { getProductionExecutionPlan, getProductionProgress } from '@/axios/production-management'
 
 const data = ref({
   section1: {
@@ -10,27 +11,29 @@ const data = ref({
       当月采掘进尺: { name: '当月采掘进尺', value: 91, unit: 'm' },
     },
     2: {
-      采矿: {
-        name: '采矿',
-        value: 60,
-        unit: '%',
-        bg: 'bg-[url(@/assets/img/25-1.png)]',
-        textClass: 'text-[#789FFF]',
-      },
-      选矿: {
-        name: '选矿',
-        value: 60,
-        unit: '%',
-        bg: 'bg-[url(@/assets/img/25-2.png)]',
-        textClass: 'text-[#62DAEF]',
-      },
-      运输: {
-        name: '运输',
-        value: 60,
-        unit: '%',
-        bg: 'bg-[url(@/assets/img/25-3.png)]',
-        textClass: 'text-[#62EFD3]',
-      },
+      list: [
+        {
+          name: '采矿',
+          value: 60,
+          unit: '%',
+          bg: 'bg-[url(@/assets/img/25-1.png)]',
+          textClass: 'text-[#789FFF]',
+        },
+        {
+          name: '选矿',
+          value: 60,
+          unit: '%',
+          bg: 'bg-[url(@/assets/img/25-2.png)]',
+          textClass: 'text-[#62DAEF]',
+        },
+        {
+          name: '运输',
+          value: 60,
+          unit: '%',
+          bg: 'bg-[url(@/assets/img/25-3.png)]',
+          textClass: 'text-[#62EFD3]',
+        },
+      ],
     },
   },
   section2: {
@@ -52,12 +55,48 @@ const data = ref({
     },
   },
 })
+// 获取生产进度
+const ProductionProgress = async () => {
+  const res = await getProductionProgress({})
+  console.log(res)
+
+  if (res.data.code === 200) {
+    const result = res.data.data
+    data.value.section1[1]['当日采掘进尺'].value = result.dailyNum
+    data.value.section1[1]['当月采掘进尺'].value = result.monthlyNum
+
+    data.value.section1[2].list.forEach((item) => {
+      item.name = ''
+      item.value = ''
+      item.unit = ''
+    })
+    data.value.section1[2].list.forEach((item, index) => {
+      item.name = result.list[index].type
+      item.value = ((result.list[index].dailyCompleteNum / result.list[index].dailyPlanNum) * 100).toFixed(2)
+      item.unit = '%'
+    })
+  }
+}
+// 获取生产执行计划
+const ProductionExecutionPlan = async () => {
+  const res = await getProductionExecutionPlan({})
+  if (res.data.code === 200) {
+    const { dailyPlanNum, dailyCompleteNum, productionExecutionYearPlanDTO } = res.data.data
+    data.value.section2['1']['日产量'].planValue = dailyPlanNum
+    data.value.section2['1']['日产量'].actualValue = dailyCompleteNum
+    data.value.section2['1']['年产量'].planValue = productionExecutionYearPlanDTO.yearPlanNum
+    data.value.section2['1']['年产量'].actualValue = productionExecutionYearPlanDTO.yearCompleteNum
+  }
+}
 
 let echartsData1 = ref({})
 
 onMounted(() => {
   echartsData1.value = panel(2.5, 5)
 })
+
+ProductionExecutionPlan()
+ProductionProgress()
 </script>
 <template>
   <div class="w-[700px] top-[117px] left-[44px] absolute flex flex-col">
@@ -83,7 +122,7 @@ onMounted(() => {
       </div>
 
       <div class="flex flex-col gap-y-[30px]">
-        <div v-for="(item, index) in data.section1[2]" key="index">
+        <div v-for="(item, index) in data.section1[2].list" key="index">
           <div class="w-[650px] h-[144px] kt-bg-full flex items-center" :class="[item.bg]">
             <span class="ml-[202px] text-[28px]">{{ item.name }}</span>
             <span class="ml-[262px] text-[48px]" :class="item.textClass">{{ item.value }}</span>

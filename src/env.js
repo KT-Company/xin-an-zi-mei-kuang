@@ -3,11 +3,11 @@ const CUS_ENV = {}
 // 自定义环境变量
 if (import.meta.env.DEV) {
   // 开发环境接口地址
-  CUS_ENV.API1_URL = 'http://localhost:3000'
+  CUS_ENV.API1_URL = 'http://ubc59b36.natappfree.cc'
 }
 else {
   // 生产环境接口地址
-  CUS_ENV.API1_URL = 'https://api1.example.com'
+  CUS_ENV.API1_URL = 'http://192.168.3.99:8099'
 }
 
 // 导出所有环境变量

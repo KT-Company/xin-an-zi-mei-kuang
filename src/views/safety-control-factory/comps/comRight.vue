@@ -15,7 +15,7 @@ const data = ref({
       },
       请假人数: {
         name: '请假人数',
-        value: 698,
+        value: 3,
         img: 'bg-[url(@/assets/img/8-2.png)]',
         textColor: 'text-[#62EFD3]',
       },
