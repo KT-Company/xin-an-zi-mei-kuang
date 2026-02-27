@@ -8,6 +8,7 @@ import './style/tailwind.css'
 import './style/animate.min.css'
 import '@/custom-elements/index.js'
 import ElementPlus from 'element-plus'
+import { VideoStream } from './video/video-stream';
 const app = createApp(App)
 const pinia = createPinia()
 app.use(KTUI).use(router).use(pinia).use(ElementPlus).mount('#app')

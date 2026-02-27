@@ -31,46 +31,46 @@ const data = ref({
     },
   },
   section3: [
-    {
-      content: 'XXXX设备',
-      alarmValue: '15.0',
-      limitValue: '20.0',
-      envFactor: 'PM10',
-      time: '2025年9月24日 14:45:34',
-      status: '超下限',
-    },
-    {
-      content: 'XXXX设备',
-      alarmValue: '25.0',
-      limitValue: '20.0',
-      envFactor: 'PM10',
-      time: '2025年9月24日 14:45:34',
-      status: '超上限',
-    },
-    {
-      content: 'XXXX设备',
-      alarmValue: '15.0',
-      limitValue: '20.0',
-      envFactor: 'PM10',
-      time: '2025年9月24日 14:45:34',
-      status: '离线报警',
-    },
-    {
-      content: 'XXXX设备',
-      alarmValue: '15.0',
-      limitValue: '20.0',
-      envFactor: 'PM10',
-      time: '2025年9月24日 14:45:34',
-      status: '超下限',
-    },
-    {
-      content: 'aaa设备',
-      alarmValue: '15.0',
-      limitValue: '20.0',
-      envFactor: '重庆',
-      time: '2025年10月24日 14:45:34',
-      status: '超下限',
-    },
+    // {
+    //   content: 'XXXX设备',
+    //   alarmValue: '15.0',
+    //   limitValue: '20.0',
+    //   envFactor: 'PM10',
+    //   time: '2025年9月24日 14:45:34',
+    //   status: '超下限',
+    // },
+    // {
+    //   content: 'XXXX设备',
+    //   alarmValue: '25.0',
+    //   limitValue: '20.0',
+    //   envFactor: 'PM10',
+    //   time: '2025年9月24日 14:45:34',
+    //   status: '超上限',
+    // },
+    // {
+    //   content: 'XXXX设备',
+    //   alarmValue: '15.0',
+    //   limitValue: '20.0',
+    //   envFactor: 'PM10',
+    //   time: '2025年9月24日 14:45:34',
+    //   status: '离线报警',
+    // },
+    // {
+    //   content: 'XXXX设备',
+    //   alarmValue: '15.0',
+    //   limitValue: '20.0',
+    //   envFactor: 'PM10',
+    //   time: '2025年9月24日 14:45:34',
+    //   status: '超下限',
+    // },
+    // {
+    //   content: 'aaa设备',
+    //   alarmValue: '15.0',
+    //   limitValue: '20.0',
+    //   envFactor: '重庆',
+    //   time: '2025年10月24日 14:45:34',
+    //   status: '超下限',
+    // },
   ],
   // section3: {
   //   1: {
@@ -168,7 +168,7 @@ alarmList()
       </div>
     </div>
     <!-- 水资源与排放 -->
-    <cus-title title="水资源与排放" position="right" />
+    <cus-title title="电力能耗分析" position="right" />
     <div class="bg-[url('@/assets/img/1.png')] h-[311px] w-[700px] kt-bg-full flex flex-col items-center justify-around">
       <div class="w-[660px] h-[84px] bg-[url('@/assets/img/23.png')] mt-[20px] flex items-center">
         <div class="ml-[13px] text-[28px] tracking-[2px] font-[NotoSansSC]">{{ data.section2['1'].name }}</div>
@@ -189,7 +189,7 @@ alarmList()
         <div class="w-[32px] h-[32px] bg-[url('@/assets/img/33.png')] absolute top-[11px] right-[22px]" @click="search()"></div>
       </div>
       <!-- 自动滚动区域 -->
-      <div class="w-full h-[453px] ml-[20px] mt-[22px] mb-[28px]">
+      <div class="w-full h-[453px] ml-[20px] mt-[22px] mb-[28px]" v-if="filteredList.length">
         <ktAnimeScroll ref="scrollRef">
           <!-- <div v-for="(item, index) in filteredList" :key="index">
             <div
@@ -236,6 +236,11 @@ alarmList()
             </div>
           </div>
         </ktAnimeScroll>
+      </div>
+      <div class="kt-table-empty flex justify-center items-center h-full w-full text-[24px]" v-else>
+        <slot name="empty">
+          <span>暂无数据</span>
+        </slot>
       </div>
     </div>
   </div>

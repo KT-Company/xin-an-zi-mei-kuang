@@ -10,7 +10,7 @@ const props = defineProps({
   },
 })
 
-console.log(props.option, 'props.option')
+// console.log(props.option, 'props.option')
 const emits = defineEmits(['chartClick'])
 // 获取 dom 和 父组件数据 并定义"myChart"用于初始化图表
 const chartDom = ref()

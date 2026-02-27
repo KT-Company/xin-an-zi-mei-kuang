@@ -2,6 +2,9 @@
 import KtNav from '@/components/kt-ui/kt-nav.vue'
 import KtTimer from '@/components/utils-ui/kt-timer.vue'
 import autofit from 'autofit.js'
+import ModelHtml from '@/views/modelHtml/model.vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
 const navState = ref('default') // 当前导航状态
 const isRoamActive = ref(false)
 
@@ -32,6 +35,10 @@ const initNavState = () => {
   }
 }
 
+const isModelHtmlRoute = computed(() => {
+  return route.path === '/modelHtml'
+})
+console.log('route.name', route.path)
 onMounted(() => {
   autofit.init(
     {
@@ -64,6 +71,7 @@ onMounted(() => {
         <component :is="Component" :key="route.name" />
       </keep-alive>
     </router-view>
+    <ModelHtml v-if="isModelHtmlRoute" />
   </div>
 </template>
 

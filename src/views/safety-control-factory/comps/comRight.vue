@@ -166,19 +166,45 @@ const data = ref({
     },
   },
 })
+const allRightContents = ref([
+  [{ id: 'KTU-001', name: '095防跑车一', status: '正常', url: 'rtsp://admin:abc12345@172.16.89.21/streaming/channels/102' }],
+  [{ id: 'KTU-002', name: '045 休息室', status: '正常', url: 'rtsp://admin:zy123456@192.168.3.117/streaming/channels/102' }],
+  [{ id: 'KTU-003', name: '456竖井机房信号房', status: '正常', url: 'rtsp://admin:abc12345@172.16.89.43/streaming/channels/102' }],
+  [{ id: 'KTU-004', name: '456竖井机房应急火警监控', status: '正常', url: 'rtsp://admin:zy123456@172.16.89.114/streaming/channels/102' }],
+  [{ id: 'KTU-005', name: '427炸药库', status: '正常', url: 'rtsp://admin:abc12345@172.16.89.71/streaming/channels/102' }],
+])
+const rightContent1 = ref(allRightContents.value[0])
 
 const changeActive = (index) => {
-  for (const key in data.value.section3) {
-    if (key === index) {
-      data.value.section3[key].active = true
-    } else {
-      data.value.section3[key].active = false
-    }
-  }
+  // 1️⃣ 重置所有 active
+  Object.keys(data.value.section3).forEach((key) => {
+    data.value.section3[key].active = false
+  })
+
+  // 2️⃣ 设置当前 active
+  data.value.section3[index].active = true
+
+  // 3️⃣ 切换内容（index 从 1 开始，要 -1）
+  rightContent1.value = allRightContents.value[index - 1]
 }
+
+let timer = null
+let currentIndex = 1
+
+onMounted(() => {
+  timer = setInterval(() => {
+    currentIndex++
+    if (currentIndex > 5) currentIndex = 1
+    changeActive(currentIndex)
+  }, 15000) // 15 秒
+})
+
+onUnmounted(() => {
+  clearInterval(timer)
+})
 </script>
 <template>
-  <div class="w-[700px] top-[117px] right-[44px] absolute flex flex-col">
+  <div class="w-[700px] top-[117px] right-[44px] absolute flex flex-col pointer-events-auto">
     <!--人员在岗-->
     <cus-title title="人员在岗" />
     <div class="bg-[url('@/assets/img/1.png')] h-[331px] w-[700px] kt-bg-full">
@@ -211,9 +237,9 @@ const changeActive = (index) => {
       </div>
     </div>
     <cus-title title="视频监控" />
-    <div class="bg-[url('@/assets/img/1.png')] h-[420px] w-[700px] kt-bg-full">
-      <div class="bg-[url('@/assets/img/12.png')] h-[33px] w-[192px] kt-bg-full ml-[33px] text-[24px] pl-[33px]">XXX巷道口</div>
-      <div class="ml-[33px] mt-[7px] flex items-center justify-center bg-[url('@/assets/img/video.png')] kt-bg-full" style="height: 362px; width: 647px">
+    <div class="bg-[url('@/assets/img/1.png')] h-[420px] w-[700px] kt-bg-full flex flex-col">
+      <!-- <div class="bg-[url('@/assets/img/12.png')] h-[33px] w-[192px] kt-bg-full ml-[33px] text-[24px] pl-[33px]">XXX巷道口</div> -->
+      <!-- <div class="ml-[33px] mt-[7px] flex items-center justify-center bg-[url('@/assets/img/video.png')] kt-bg-full" style="height: 362px; width: 647px">
         <div class="relative">
           <video class="w-[610px] h-[343px] object-cover rounded-sm bg-gray-900" autoplay muted loop>
             <div class="w-full h-full flex flex-col items-center justify-center text-gray-500">
@@ -222,10 +248,13 @@ const changeActive = (index) => {
             </div>
           </video>
         </div>
+      </div> -->
+      <div class="w-full h-full mt-[13px] flex flex-wrap justify-center">
+        <cus-jk-video v-for="(item, index) in rightContent1" :key="index" :url="item.url" :uid="item.id" :title="item.name" />
       </div>
       <div class="w-[175px] flex justify-around ml-[260px] mt-[5px] pointer-events-auto">
-        <div v-for="(item, index) in data.section3" key="index">
-          <div :class="['w-[23px] h-[10px] kt-bg-full ', item.active ? item.icon1 : item.icon]" @click="changeActive(index)"></div>
+        <div v-for="(item, index) in data.section3" :key="index">
+          <div :class="['w-[23px] h-[10px] kt-bg-full', item.active ? item.icon1 : item.icon]" @click="changeActive(index)"></div>
         </div>
       </div>
     </div>

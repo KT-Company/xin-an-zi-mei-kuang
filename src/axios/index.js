@@ -7,13 +7,27 @@ axios.defaults.timeout = 60000
 axios.defaults.baseURL = window.__ENV.API1_URL
 
 // http request 拦截器
+// axios.interceptors.request.use(
+//   (config) => {
+//     // 配置请求头
+//     config.headers = {
+//       // 'Content-Type':'application/x-www-form-urlencoded',   // 传参方式表单
+//       // 'Content-Type': 'application/json;charset=UTF-8', // 传参方式json
+//       //   'token':'80c483d59ca86ad0393cf8a98416e2a1'              // 这里自定义配置，这里传的是token
+//     }
+//     return config
+//   },
+//   (error) => {
+//     return Promise.reject(error)
+//   }
+// )
 axios.interceptors.request.use(
   (config) => {
-    // 配置请求头
-    config.headers = {
-      // 'Content-Type':'application/x-www-form-urlencoded',   // 传参方式表单
-      'Content-Type': 'application/json;charset=UTF-8', // 传参方式json
-      //   'token':'80c483d59ca86ad0393cf8a98416e2a1'              // 这里自定义配置，这里传的是token
+    // 判断是不是文件上传
+    if (config.data instanceof FormData) {
+      config.headers['Content-Type'] = 'multipart/form-data'
+    } else {
+      config.headers['Content-Type'] = 'application/json;charset=UTF-8'
     }
     return config
   },
@@ -40,28 +54,50 @@ axios.interceptors.response.use(
 )
 
 // 封装 GET POST 请求并导出
-export function request(url = '', params = {}, type = 'POST') {
+export function request(url = '', params = {}, type = 'POST', config = {}) {
   return new Promise((resolve, reject) => {
-    let promise
-    if (type.toUpperCase() === 'GET') {
-      promise = axios({
-        url,
-        params,
-      })
-    } else if (type.toUpperCase() === 'POST') {
-      promise = axios({
-        method: 'POST',
-        url,
-        data: params,
-      })
-    }
+    let promise;
+
+    // 默认配置合并
+    const requestConfig = {
+      ...config, // 合并传递的配置
+      url,
+      method: type.toUpperCase(), // 正确设置 HTTP 方法
+      params: type.toUpperCase() === 'GET' ? params : undefined, // GET 请求使用 params
+      data: type.toUpperCase() === 'POST' ? params : undefined, // POST 请求使用 data
+    };
+
+    promise = axios(requestConfig);
+
     // 处理返回
     promise
-      .then((res) => {
-        resolve(res)
-      })
-      .catch((err) => {
-        reject(err)
-      })
-  })
+      .then((res) => resolve(res))
+      .catch((err) => reject(err));
+  });
 }
+// 封装 GET POST 请求并导出
+// export function request(url = '', params = {}, type = 'POST') {
+//   return new Promise((resolve, reject) => {
+//     let promise
+//     if (type.toUpperCase() === 'GET') {
+//       promise = axios({
+//         url,
+//         params,
+//       })
+//     } else if (type.toUpperCase() === 'POST') {
+//       promise = axios({
+//         method: 'POST',
+//         url,
+//         data: params,
+//       })
+//     }
+//     // 处理返回
+//     promise
+//       .then((res) => {
+//         resolve(res)
+//       })
+//       .catch((err) => {
+//         reject(err)
+//       })
+//   })
+// }

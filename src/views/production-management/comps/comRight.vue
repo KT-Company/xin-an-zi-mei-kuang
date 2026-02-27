@@ -117,7 +117,7 @@ GroupStatus()
 <template>
   <div class="w-[700px] top-[117px] right-[44px] absolute flex flex-col">
     <!-- 班组状态  -->
-    <cus-title title="班组状态" position="right" />
+    <cus-title title="班组状态" position="right" :download="true" />
     <div class="bg-[url('@/assets/img/1.png')] h-[180px] w-[700px] kt-bg-full flex flex-col items-center justify-around">
       <div class="w-[650px] flex items-center justify-around">
         <div v-for="(item, index) in data.section1[1]" key="index">

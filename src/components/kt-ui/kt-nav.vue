@@ -273,7 +273,19 @@ watchEffect(() => {
   <div class="absolute bottom-[60px] left-[2934px] w-[265px] h-[58px] bg-[url('@/assets/img/18-2.png')] z-3 pointer-events-auto" v-if="selectedMine">
     <span class="text-[28px] pl-[106px] pt-[5px]" @click="handleFactoryClick()">厂区场景</span>
   </div>
-  <!-- <iframe src="http://127.0.0.1:5501/new3dgs.html" class="absolute bottom-[0px] left-[0px] w-[100%] h-[100%]" frameborder="0" v-if="selectedFactory"></iframe> -->
+  <!-- <iframe
+    src="http://127.0.0.1:5501/new3dgs.html"
+    class="absolute bottom-[0px] left-[0px] w-[100%] h-[100%] pointer-events-auto"
+    frameborder="0"
+    v-if="selectedFactory"
+  ></iframe> -->
+  <iframe
+    src="/new3dgs/new3dgs.html"
+    class="absolute bottom-[0px] left-[0px] w-[100%] h-[100%] pointer-events-auto"
+    frameborder="0"
+    v-if="selectedFactory"
+  ></iframe>
+  <kt-pixel-streaming-player v-if="selectedMine" />
 </template>
 
 <style lang="less">

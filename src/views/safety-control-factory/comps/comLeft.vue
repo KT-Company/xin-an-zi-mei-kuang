@@ -155,10 +155,9 @@ const chartRef = ref(null)
 
 const MonitoringAndAlarming = async () => {
   const dateType = getDateType() // 获取当前选中的类型
-  console.log('请求数据类型:', dateType)
+  // console.log('请求数据类型:', dateType)
 
   const res = await getMonitoringAndAlarming({ dateType })
-  console.log('监控与告警数据:', res)
 
   if (res.data.code === 200) {
     const result = res.data.data
@@ -199,7 +198,7 @@ const MonitoringAndAlarming = async () => {
         }
       })
 
-      console.log(`更新 ${currentTabName.value} 数据:`, rawData.value[currentTabName.value])
+      // console.log(`更新 ${currentTabName.value} 数据:`, rawData.value[currentTabName.value])
     }
   }
 }
@@ -207,7 +206,6 @@ const MonitoringAndAlarming = async () => {
 
 const DeviceSafetyInspection = async () => {
   const res = await getDeviceSafetyInspection({})
-  console.log('3333333333333333333', res)
   if (res.data.code === 200) {
     const result = res.data.data
     result.forEach((item) => {
@@ -222,15 +220,14 @@ const DeviceSafetyInspection = async () => {
 // 隐患整治
 const PotentialRiskRectification = async () => {
   const res = await getPotentialRiskRectification({})
-  console.log('4444444444444444444', res)
   if (res.data.code === 200) {
     const result = res.data.data
     result.forEach((item) => {
       // const { potentialNum, inspectionNum } = item
       data.value.section2['隐患总数'].total = item.potentialNum
       data.value.section2['已验收数'].total = item.inspectionNum
-      console.log(item, item.potentialNum, item.inspectionNum)
     })
+    echartsData1.value = panel(data.value.section2['隐患总数'].total, data.value.section2['已验收数'].total)
   }
 }
 
@@ -271,11 +268,11 @@ const PotentialRiskRectification = async () => {
 // })
 
 onMounted(() => {
-  echartsData1.value = panel(2.5, 5)
-  echartsData2.value = pie(data.value.section3['1'].data)
   MonitoringAndAlarming()
   PotentialRiskRectification()
   DeviceSafetyInspection()
+  echartsData1.value = panel(2.5, 5)
+  echartsData2.value = pie(data.value.section3['1'].data)
 })
 
 // MonitoringAndAlarming()
@@ -286,7 +283,7 @@ watch(select, () => {
 <template>
   <div class="w-[700px] top-[117px] left-[44px] absolute flex flex-col">
     <!-- 设备安全检测  -->
-    <cus-title title="设备安全检测" position="left" />
+    <cus-title title="设备安全监测" position="left" :download="true" />
     <div class="bg-[url('@/assets/img/1.png')] h-[289px] w-[700px] kt-bg-full flex flex-col items-center justify-around">
       <div class="w-[660px] h-[84px] bg-[url('@/assets/img/22-1.png')] mt-[20px] flex items-center">
         <div class="ml-[13px] text-[28px] tracking-[2px] font-[NotoSansSC]">{{ data.section1['1'].name }}</div>
@@ -304,7 +301,7 @@ watch(select, () => {
       </div>
     </div>
     <!-- 隐患治理 -->
-    <cus-title title="隐患治理" position="left" />
+    <cus-title title="隐患治理" position="left" :download="true" />
     <div class="bg-[url('@/assets/img/1.png')] h-[282px] w-[700px] kt-bg-full flex items-center justify-around">
       <div class="flex-2">
         <div class="w-[204px] h-[164px] bg-[url('@/assets/img/3.png')] kt-bg-full relative pl-[8px]">

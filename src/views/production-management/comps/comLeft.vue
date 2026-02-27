@@ -101,7 +101,7 @@ ProductionProgress()
 <template>
   <div class="w-[700px] top-[117px] left-[44px] absolute flex flex-col">
     <!-- 生产进度  -->
-    <cus-title title="生产进度" position="left" />
+    <cus-title title="生产进度" position="left" ::download="true" />
     <div class="bg-[url('@/assets/img/1.png')] h-[718px] w-[700px] kt-bg-full flex flex-col items-center justify-around">
       <div class="flex gap-x-[24px] flex-wrap">
         <div v-for="(item, index) in data.section1[1]" :key="index" class="w-[318px] h-[117px] bg-[url('@/assets/img/24.png')] kt-bg-full flex flex-col">
@@ -132,7 +132,7 @@ ProductionProgress()
       </div>
     </div>
     <!-- 生产计划执行 -->
-    <cus-title title="生产计划执行" position="left" />
+    <cus-title title="生产计划执行" position="left" :download="true" />
     <div class="bg-[url('@/assets/img/1.png')] h-[421px] w-[700px] kt-bg-full flex items-center justify-around">
       <div class="flex-2">
         <div class="w-[204px] h-[164px] bg-[url('@/assets/img/3.png')] kt-bg-full relative pl-[8px] ml-[31px]">

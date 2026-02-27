@@ -1,8 +1,8 @@
 import * as echarts from 'echarts';
 
 export function panel(value, max) {
-  var value = 2.5;
-  var max = 5;
+  var value = value;
+  var max = max;
   const option = {
     backgroundColor: 'transparent',
     title: {
@@ -48,7 +48,7 @@ export function panel(value, max) {
         show: false,
       },
       min: 0,
-      max: 6.666,
+      max: max * 1.33,
       // boundaryGap: ['0', '10'],
       startAngle: 225,
     },
@@ -282,7 +282,7 @@ export function pie(types = []) {
     },
   }))
 
-  console.log('pie', shipMap, accidentData);
+  // console.log('pie', shipMap, accidentData);
   // var echartData = [
   //   {
   //     value: shipMap["坠落"] || 0,

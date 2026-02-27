@@ -294,9 +294,9 @@ const EnvMonitoring = async () => {
 EnvMonitoring()
 </script>
 <template>
-  <div class="w-[700px] top-[117px] left-[44px] absolute flex flex-col">
+  <div class="w-[700px] top-[117px] left-[44px] absolute flex flex-col pointer-events-auto">
     <!-- 环境监测  -->
-    <cus-title title="环境监测" position="left" />
+    <cus-title title="环境监测" position="left" download="true" />
     <div class="bg-[url('@/assets/img/1.png')] h-[621px] w-[700px] kt-bg-full flex flex-col items-center justify-around">
       <div class="relative w-full">
         <div class="absolute left-[20px] w-[38px] h-[38px] bg-[url('@/assets/img/10.png')] kt-bg-full"></div>
@@ -313,18 +313,18 @@ EnvMonitoring()
           </div>
         </div>
       </div>
-      <div class="relative w-full">
+      <div class="relative w-full flex justify-center items-center">
         <div class="absolute left-[20px] w-[38px] h-[38px] bg-[url('@/assets/img/10.png')] kt-bg-full"></div>
         <div class="absolute left-[60px] text-[24px] font-[NotoSansSC]">井下当天空气质量</div>
-      </div>
-      <div class="flex flex-nowrap gap-[5px] ml-[386px] pointer-events-auto">
-        <div v-for="(item, index) in data.section1['2']" :key="index">
-          <div
-            class="w-[96px] h-[28px] kt-bg-full pointer-events-auto flex justify-center items-center"
-            :class="[item.active ? item.bg : item.bg2]"
-            @click="handleSelect(index)"
-          >
-            <span class="text-[20px]">{{ item.name }}</span>
+        <div class="flex flex-nowrap gap-[5px] ml-[386px] pointer-events-auto">
+          <div v-for="(item, index) in data.section1['2']" :key="index">
+            <div
+              class="w-[96px] h-[28px] kt-bg-full pointer-events-auto flex justify-center items-center"
+              :class="[item.active ? item.bg : item.bg2]"
+              @click="handleSelect(index)"
+            >
+              <span class="text-[20px]">{{ item.name }}</span>
+            </div>
           </div>
         </div>
       </div>

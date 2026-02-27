@@ -5,4 +5,5 @@ window.kt_config = {
   ws_url: "ws://10.1.10.21:89/ws/", // ws 返回一个像素流地址，一定要有末尾的 /，用于后端匹配像素流ip 也就是 stream_port，UE像素流多对多地址
   stream_port: "", // 多对多流媒体端口 用于后端匹配像素流ip
   stream_ip: "http://192.168.3.99:667/", // UE像素流一对一地址
+  monitor_ip: "http://192.168.3.99:1399" //监控ip
 };
