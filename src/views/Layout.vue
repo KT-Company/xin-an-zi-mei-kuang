@@ -24,6 +24,7 @@ const initNavState = () => {
     'environmental-regulation-system', // 环境监控系统
     'production-management-system', // 生产管理系统
     'decision-making-systems', // 经营决策系统
+    'model', // 环境监测设备弹窗
   ]
 
   const routeName = activePath.split('/').pop() || ''

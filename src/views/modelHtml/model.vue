@@ -51,8 +51,8 @@ const data3 = ref({
       </div>
     </div> -->
     <model-cpt :data="data1" />
-    <model-cpt :data="data2" />
-    <model-cpt :data="data3" />
+    <!-- <model-cpt :data="data2" />
+    <model-cpt :data="data3" /> -->
   </div>
 </template>
 

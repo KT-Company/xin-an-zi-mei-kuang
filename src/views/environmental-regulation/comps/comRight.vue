@@ -5,7 +5,7 @@ import cusPjTable from '@/components/my-ui/cus-pj-table.vue'
 import { createOption2 } from './createOption'
 import cusTable2 from '@/components/my-ui/cus-table2.vue'
 import ktAnimeScroll from '@/components/kt-ui/kt-anime-scroll.vue'
-import { getAlarmList } from '@/axios/environmental-regulation'
+import { getAlarmList, getPowerConsumptionAnalysis } from '@/axios/environmental-regulation'
 
 const data = ref({
   section1: {
@@ -151,7 +151,28 @@ const alarmList = async () => {
     })
   }
 }
+
+// 数据转换函数
+const transformData = (rawData) => {
+  console.log('rawData: ', rawData)
+  return rawData.map((item) => ({
+    date: item.record_date.split('-').slice(1).join('/'), // 将日期格式转换为 MM/DD
+    value: parseFloat(item.data_increment).toFixed(2), // 转换为浮点数并保留两位小数
+  }))
+}
+const powerConsumptionAnalysis = async () => {
+  const res = await getPowerConsumptionAnalysis()
+  console.log('222222222222222222', res)
+  if (res.code === 200) {
+    const result = res.data
+    data.value.section2['1'].unit = parseFloat(result['本月总耗电量数据统计'].value).toFixed(2)
+    console.log('data.value.section2[2].options.option1: ', data.value.section2[2].options.option1)
+
+    data.value.section2[2].options.option1 = createOption2(transformData(result['电力近七天消耗曲线']))
+  }
+}
 alarmList()
+powerConsumptionAnalysis()
 </script>
 <template>
   <div class="w-[700px] top-[117px] right-[44px] absolute flex flex-col">
@@ -210,8 +231,8 @@ alarmList()
                 item.status === '超下限'
                   ? 'bg-[url(@/assets/img/35-1.png)]'
                   : item.status === '超上限'
-                  ? 'bg-[url(@/assets/img/35-2.png)]'
-                  : 'bg-[url(@/assets/img/35-3.png)]',
+                    ? 'bg-[url(@/assets/img/35-2.png)]'
+                    : 'bg-[url(@/assets/img/35-3.png)]',
               ]"
             >
               <div class="ml-[64px] text-[24px] h-[50px] flex items-center">
@@ -251,7 +272,9 @@ alarmList()
   width: 660px;
   height: 54px;
   background: linear-gradient(180deg, rgba(0, 123, 215, 0) 0%, rgba(0, 123, 215, 0.2) 100%), rgba(7, 7, 17, 0.48);
-  box-shadow: 0px 3 12px 0px rgba(0, 123, 215, 0.4), 0px 2 5px 0px rgba(0, 123, 215, 0.3);
+  box-shadow:
+    0px 3 12px 0px rgba(0, 123, 215, 0.4),
+    0px 2 5px 0px rgba(0, 123, 215, 0.3);
   border-radius: 4px 4px 4px 4px;
   border: 2px solid #088bdc;
 }

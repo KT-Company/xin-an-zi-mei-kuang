@@ -356,7 +356,7 @@ import * as echarts from 'echarts';
 //     },
 //     left: '18%',   // 整体水平位置
 //     top: '25%',    // 整体垂直位置
-    
+
 //     // 单独调整主标题位置（相对于整体）
 //     textVerticalAlign: 'top', // 主标题对齐方式
 //     textAlign: 'center',
@@ -398,7 +398,7 @@ import * as echarts from 'echarts';
 //             }
 //         }
 //           },
-          
+
 //         },
 //         //(第二列)
 //                 {
@@ -436,11 +436,11 @@ import * as echarts from 'echarts';
 //             }
 //         }
 //           },
-          
+
 //         },
 //       ],
 //       series: [
-        
+
 //         {
 //           clockwise: false,
 //           name: "船数量",
@@ -482,17 +482,17 @@ export const createOption1 = (rawData) => {
     {
       date: "12",
       value: "60",
-        value2: "80",
+      value2: "80",
     },
     {
       date: "16",
       value: "175",
-        value2: "156",
+      value2: "156",
     },
     {
       date: "20",
       value: "265",
-        value2: "134",
+      value2: "134",
     },
   ];
   const dataset = {
@@ -529,7 +529,7 @@ export const createOption1 = (rawData) => {
           } else if (param.seriesName === '二氧化碳') {
             dotColor = '#1BCEBF';
           }
-          
+
           // 正确获取数值
           let value = '';
           if (param.seriesName === '一氧化碳') {
@@ -537,7 +537,7 @@ export const createOption1 = (rawData) => {
           } else if (param.seriesName === '二氧化碳') {
             value = param.data.value2 || param.data[2];
           }
-          
+
           result += `
             <div style="display: flex; align-items: center; margin: 5px 0;">
               <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: ${dotColor}; margin-right: 10px;"></span>
@@ -560,20 +560,20 @@ export const createOption1 = (rawData) => {
         padding: 10px;
       `,
     },
-legend: {
-  show: true,
-  right: 0,
-  icon: 'circle', // 小圆点样式
-  textStyle: {
-    color,
-    fontSize: 16,
-  },
-  itemWidth: 14,      // 圆点大小
-  itemHeight: 14,
-  x: "450px",
-  y: "0px",
-  itemGap: 28,
-},
+    legend: {
+      show: true,
+      right: 0,
+      icon: 'circle', // 小圆点样式
+      textStyle: {
+        color,
+        fontSize: 16,
+      },
+      itemWidth: 14,      // 圆点大小
+      itemHeight: 14,
+      x: "450px",
+      y: "0px",
+      itemGap: 28,
+    },
 
     xAxis: {
       type: "category",
@@ -583,28 +583,28 @@ legend: {
       },
     },
     yAxis: {
-  show: true, // 显示Y轴
-  max(val) {
-    return Math.ceil((val.max * 1.25) / 10) * 10;
-  },
-  axisLabel: {
-    show: false, // 👈 不显示Y轴的数值文字
-  },
-  axisLine: {
-    show: false, // 👈 不显示Y轴那条竖线（可选）
-  },
-  axisTick: {
-    show: false, // 👈 不显示刻度线（可选）
-  },
-  splitLine: {
-    show: true, // ✅ 显示横向网格线
-    lineStyle: {
-      color: "#ffffff", // 横线颜色
-      type: [4, 4], // 虚线
-      width: 1,
+      show: true, // 显示Y轴
+      max(val) {
+        return Math.ceil((val.max * 1.25) / 10) * 10;
+      },
+      axisLabel: {
+        show: false, // 👈 不显示Y轴的数值文字
+      },
+      axisLine: {
+        show: false, // 👈 不显示Y轴那条竖线（可选）
+      },
+      axisTick: {
+        show: false, // 👈 不显示刻度线（可选）
+      },
+      splitLine: {
+        show: true, // ✅ 显示横向网格线
+        lineStyle: {
+          color: "#ffffff", // 横线颜色
+          type: [4, 4], // 虚线
+          width: 1,
+        },
+      },
     },
-  },
-},
     dataset,
     series: [
       {
@@ -679,22 +679,22 @@ export const createOption2 = (rawData) => {
     {
       date: "9.4",
       value: "60",
-      
+
     },
     {
       date: "9.5",
       value: "175",
-      
+
     },
     {
       date: "9.6",
       value: "265",
-      
+
     },
     {
       date: "9.7",
       value: "205",
-      
+
     },
   ];
   const dataset = {
@@ -729,13 +729,13 @@ export const createOption2 = (rawData) => {
           if (param.seriesName === '用电量') {
             dotColor = '#33AEEB';
           }
-          
+
           // 正确获取数值
           let value = '';
           if (param.seriesName === '用电量') {
             value = param.data.value || param.data[1];
           }
-          
+
           result += `
             <div style="display: flex; align-items: center; margin: 5px 0;">
               <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: ${dotColor}; margin-right: 10px;"></span>
@@ -767,28 +767,28 @@ export const createOption2 = (rawData) => {
       },
     },
     yAxis: {
-  show: false, // 显示Y轴
-  max(val) {
-    return Math.ceil((val.max * 1.25) / 10) * 10;
-  },
-  axisLabel: {
-    show: false, // 👈 不显示Y轴的数值文字
-  },
-  axisLine: {
-    show: false, // 👈 不显示Y轴那条竖线（可选）
-  },
-  axisTick: {
-    show: false, // 👈 不显示刻度线（可选）
-  },
-  splitLine: {
-    show: true, // ✅ 显示横向网格线
-    lineStyle: {
-      color: "#ffffff", // 横线颜色
-      type: [4, 4], // 虚线
-      width: 1,
+      show: false, // 显示Y轴
+      max(val) {
+        return Math.ceil((val.max * 1.25) / 10) * 10;
+      },
+      axisLabel: {
+        show: false, // 👈 不显示Y轴的数值文字
+      },
+      axisLine: {
+        show: false, // 👈 不显示Y轴那条竖线（可选）
+      },
+      axisTick: {
+        show: false, // 👈 不显示刻度线（可选）
+      },
+      splitLine: {
+        show: true, // ✅ 显示横向网格线
+        lineStyle: {
+          color: "#ffffff", // 横线颜色
+          type: [4, 4], // 虚线
+          width: 1,
+        },
+      },
     },
-  },
-},
     dataset,
     series: [
       {

@@ -7,3 +7,8 @@ export function getEnvMonitoring(params = {}) {
 export function getAlarmList(params = {}) {
     return request(`/environmentalSupervision/alarmList`, params, 'get');
 }
+
+// 电力能耗分析
+export function getPowerConsumptionAnalysis(params = {}) {
+    return request(`/environmentalSupervision/powerConsumptionAnalysis`, params, 'get');
+}
