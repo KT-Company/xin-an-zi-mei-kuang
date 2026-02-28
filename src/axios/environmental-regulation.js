@@ -12,3 +12,12 @@ export function getAlarmList(params = {}) {
 export function getPowerConsumptionAnalysis(params = {}) {
     return request(`/environmentalSupervision/powerConsumptionAnalysis`, params, 'get');
 }
+//根据项目id获取当前用户设备列表
+export function getUserDeviceList(params = {}){
+    return request(`/api/device/getUserDeviceList`, params, 'get');
+}
+
+//环境监测设备弹窗
+export function getEnvironmentalDeviceById(params = {}){
+    return request(`/environmentalSupervision/getEnvironmentalDeviceById`, params, 'get');
+}

@@ -107,7 +107,7 @@ const handleMineClick = () => {
   //   })
   // }
   // console.log('当前路由-------:', route.path)
-  sendToUE(`c1-btn3-type`, { item: '矿下场景', selectedFactory: selectedFactory.value, selectedMine: selectedMine.value })
+  sendToUE(`c1-btn3-type`, { item: '井下场景', selectedFactory: selectedFactory.value, selectedMine: selectedMine.value })
 }
 
 const handleRoamClick = () => {
@@ -265,7 +265,7 @@ watchEffect(() => {
     </div>
   </div>
   <div class="absolute bottom-[55px] left-[2934px] w-[265px] h-[58px] bg-[url('@/assets/img/18-1.png')] z-3 pointer-events-auto" v-if="selectedFactory">
-    <span class="text-[28px] pl-[106px] pt-[5px]" @click="handleMineClick()">矿下场景</span>
+    <span class="text-[28px] pl-[106px] pt-[5px]" @click="handleMineClick()">井下场景</span>
   </div>
   <!-- <div class="absolute bottom-[158px] left-[2934px] w-[265px] h-[58px] bg-[url('@/assets/img/18-2.png')] z-3" v-if="selectedFactory">
     <span class="text-[28px] pl-[106px] pt-[5px]" @click="handleFactoryClick()">厂区场景</span>

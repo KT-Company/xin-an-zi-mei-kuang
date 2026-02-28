@@ -2,7 +2,7 @@
 import KtNav from '@/components/kt-ui/kt-nav.vue'
 import KtTimer from '@/components/utils-ui/kt-timer.vue'
 import autofit from 'autofit.js'
-import ModelHtml from '@/views/modelHtml/model.vue'
+// import ModelHtml from '@/views/modelHtml/model.vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 const navState = ref('default') // 当前导航状态
@@ -24,7 +24,6 @@ const initNavState = () => {
     'environmental-regulation-system', // 环境监控系统
     'production-management-system', // 生产管理系统
     'decision-making-systems', // 经营决策系统
-    'model', // 环境监测设备弹窗
   ]
 
   const routeName = activePath.split('/').pop() || ''
@@ -36,9 +35,9 @@ const initNavState = () => {
   }
 }
 
-const isModelHtmlRoute = computed(() => {
-  return route.path === '/modelHtml'
-})
+// const isModelHtmlRoute = computed(() => {
+//   return route.path === '/modelHtml'
+// })
 console.log('route.name', route.path)
 onMounted(() => {
   autofit.init(
@@ -72,7 +71,7 @@ onMounted(() => {
         <component :is="Component" :key="route.name" />
       </keep-alive>
     </router-view>
-    <ModelHtml v-if="isModelHtmlRoute" />
+    <!-- <ModelHtml v-if="isModelHtmlRoute" /> -->
   </div>
 </template>
 

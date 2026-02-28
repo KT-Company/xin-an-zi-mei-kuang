@@ -162,11 +162,11 @@ const transformData = (rawData) => {
 }
 const powerConsumptionAnalysis = async () => {
   const res = await getPowerConsumptionAnalysis()
-  console.log('222222222222222222', res)
-  if (res.code === 200) {
-    const result = res.data
-    data.value.section2['1'].unit = parseFloat(result['本月总耗电量数据统计'].value).toFixed(2)
-    console.log('data.value.section2[2].options.option1: ', data.value.section2[2].options.option1)
+  if (res.data.code === 200) {
+    const result = res.data.data
+    const totalPower = result['本月总耗电量数据统计'];
+    
+    data.value.section2['1'].total = totalPower ? parseFloat(totalPower.value).toFixed(2) : '--';
 
     data.value.section2[2].options.option1 = createOption2(transformData(result['电力近七天消耗曲线']))
   }

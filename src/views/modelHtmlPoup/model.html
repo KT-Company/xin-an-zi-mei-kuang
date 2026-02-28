@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>设备信息弹窗</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- <script  src="/src/env.js"></script> -->
+    <style>
+        .popup-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            /* height: 100%; */
+            z-index: 99;
+            pointer-events: auto;
+            background: url('/src/assets/img/modelHtml/bg.png') no-repeat center center;
+            background-size: cover;
+            transition: background 0.3s ease;
+            min-height: 506px;
+        }
+
+        .popup-container.alarm {
+            background: url('/src/assets/img/modelHtml/bg2.png') no-repeat center center;
+            background-size: cover;
+        }
+
+        .model-card {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* .model-card h2 {
+           padding-left: 55px;
+            margin-top: 28px;
+            font-size: 28px;
+            color: #fff;
+            width: 100%;
+            height: 52px;
+            background: url('/src/assets/img/modelHtml/titleBg.png') no-repeat center center;
+        }
+
+        .model-card h2.alarm-title {
+            background: url('/src/assets/img/modelHtml/titleBg2.png') no-repeat center center;
+        } */
+
+        .info-title {
+            padding-left: 85px;
+            padding-top: 10px;
+            margin-top: 20px;
+            font-size: 28px;
+            color: #fff;
+            height: 52px;
+            background: url('/src/assets/img/modelHtml/titleBg.png') no-repeat center center;
+            display: flex;
+            align-items: center;
+            background-size: cover;
+            transition: background 0.3s ease;
+        }
+
+        .info-title.alarm-title {
+            background: url('/src/assets/img/modelHtml/titleBg2.png') no-repeat center center;
+            background-size: cover;
+        }
+
+        .info-close {
+            width: 48px;
+            height: 48px;
+            margin-left: 503px;
+            background: url('/src/assets/img/modelHtml/close.png') no-repeat center center;
+            background-size: cover;
+        }
+
+        .info-list {
+            margin-left: 25px;
+            margin-top: 30px;
+            width: 95%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .info-item {
+            width: 100%;
+            height: 50px;
+            background: url('/src/assets/img/modelHtml/2.png') no-repeat center center;
+            background-size: cover;
+            /* 添加这行 */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 23px 0 15px;
+            box-sizing: border-box;
+        }
+
+        .info-item span {
+            font-size: 24px;
+            color: #fff;
+            opacity: 0.8;
+        }
+
+        /* 添加最后一个元素的特殊样式 */
+        .info-item:last-child span:last-child {
+            font-weight: bold;
+            color: #62EFD3;
+        }
+
+        .info-item:last-child span:last-child.alarm-danger {
+            color: #FF6969 !important;
+            /* 报警状态：红色 */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="popup-container" :class="{ 'alarm': hasAlarm }">
+            <div class="model-card">
+                <div class="info-title" :class="{ 'alarm-title': hasAlarm }">
+                    <div>{{ data.title }}</div>
+                    <div class="info-close"></div>
+                </div>
+                <div class="info-list">
+                    <div class="info-item" v-for="item in data.data" :key="item.title">
+                        <span>{{ item.title }}</span>
+                        <span v-if="index === data.data.length - 1" :class="{'alarm-danger': hasAlarm}">
+                            {{ item.content }}
+                        </span>
+                        <span v-else>{{ item.content }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        //  window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'  
+        // window.location.ancestororigins === 'localhost' || window.location.ancestororigins === '127.0.0.1'
+        window.__ENV = {
+            API1_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? 'http://10.1.10.43:8099'
+                : 'http://192.168.3.99:8099'
+        };
+        console.log('window.__ENV:', window.__ENV);
+        console.log('API1_URL:', window.__ENV?.API1_URL);
+
+
+        const { createApp, ref } = Vue;
+
+        // 获取URL参数
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            const results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        async function getEnvironmentalDeviceById(params) {
+            const apiUrl = window.__ENV.API1_URL;
+            const response = await axios.get(apiUrl + '/environmentalSupervision/getEnvironmentalDeviceById', { params });
+            return response.data;
+        }
+
+        async function getEnvMonitoring(params) {
+            const apiUrl = window.__ENV.API1_URL;
+            const response1 = await axios.get(apiUrl + '/environmentalSupervision/environmentalMonitoring', { params });
+            return response1.data;
+        }
+
+        createApp({
+            setup() {
+                const data = ref({
+                    title: '设备信息',
+                    data: [
+                        { title: '设备名称', content: '加载中...' },
+                        { title: '设备编号', content: '加载中...' },
+                        { title: '安装位置', content: '加载中...' },
+                        { title: '噪音大小', content: '加载中...' },
+                        { title: '报警状态', content: '加载中...' },
+                    ],
+                });
+
+                // 添加 hasAlarm 到响应式数据中
+                const hasAlarm = ref(false);
+
+                // 获取URL参数
+                const id = getUrlParameter('deviceId');
+                const deviceName = getUrlParameter('deviceName');
+
+                // 请求设备数据
+                if (id) {
+                    // 同时请求设备信息和所有实时数据
+                    Promise.all([
+                        getEnvironmentalDeviceById({ id }),
+                        getEnvMonitoring()
+                    ]).then(([deviceRes, monitorRes]) => {
+                        if (deviceRes.code === 200 && monitorRes.code === 200) {
+                            const deviceData = deviceRes.data;
+                            const monitorData = monitorRes.data.find(item => item.deviceId === id);
+
+                            const infoItems = [
+                                { title: '设备编号', content: id },
+                                { title: '设备名称', content: deviceName },
+                                { title: '设备地址', content: deviceData.devaddr || '--' },
+                            ];
+
+                            // 检查是否有报警
+                            let alarmStatus = false;
+
+                            // 添加监测因子信息
+                            if (deviceData.factorList && deviceData.factorList.length > 0) {
+                                deviceData.factorList.forEach(factor => {
+                                    const value = monitorData ? monitorData[factor.factor] : undefined;
+                                    const displayValue = value !== undefined && value !== null ? value : '--';
+
+                                    infoItems.push({
+                                        title: factor.factorText,
+                                        content: `${displayValue} ${factor.factorUnit}`
+                                    });
+
+                                    // 检查报警状态
+                                    if (factor.alarm === 'true' || factor.alarm === true) {
+                                        alarmStatus = true;
+                                    }
+                                });
+                            }
+
+                            // 添加报警类型信息
+                            infoItems.push({
+                                title: '报警类型',
+                                content: alarmStatus ? '超标' : '正常'
+                            });
+
+                            // 更新数据
+                            data.value.data = infoItems;
+                            hasAlarm.value = alarmStatus; // 更新响应式的 hasAlarm
+                        } else {
+                            throw new Error('获取数据失败');
+                        }
+                    }).catch(error => {
+                        console.error('请求失败:', error);
+                        data.value.data = [
+                            { title: '设备名称', content: id },
+                            { title: '设备编号', content: deviceName },
+                            { title: '报警状态', content: '--' }
+                        ];
+                        hasAlarm.value = false; // 错误情况下设置为 false
+                    });
+                }
+
+                return {
+                    data,
+                    hasAlarm // 确保返回 hasAlarm
+                };
+            }
+        }).mount('#app');</script>
+</body>
+
+</html>
