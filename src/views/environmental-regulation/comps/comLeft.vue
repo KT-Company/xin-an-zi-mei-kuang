@@ -296,7 +296,7 @@ EnvMonitoring()
 <template>
   <div class="w-[700px] top-[117px] left-[44px] absolute flex flex-col pointer-events-auto">
     <!-- 环境监测  -->
-    <cus-title title="环境监测" position="left" download="true" />
+    <cus-title title="环境监测" position="left" :download="true" />
     <div class="bg-[url('@/assets/img/1.png')] h-[621px] w-[700px] kt-bg-full flex flex-col items-center justify-around">
       <div class="relative w-full">
         <div class="absolute left-[20px] w-[38px] h-[38px] bg-[url('@/assets/img/10.png')] kt-bg-full"></div>

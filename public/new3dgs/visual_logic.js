@@ -1589,17 +1589,17 @@ function createPL(v3d = window.v3d) {
                 changeVis('章源钨业', false);
             }, function () { }, function () { });
             /* 创建交互ui1 */
-            createObject('PLANE_WITH_HTML', 'YCZY-11', 15, 10, 0, 0, 0, 0, 0, 0, 0, 0, 'PERSPECTIVE', 'ORBIT', 'AMBIENT', 0, '/src/views/modelHtmlPoup/model.html?deviceName=YCZY-1&&deviceId=40197946', 759);
+            createObject('PLANE_WITH_HTML', 'YCZY-11', 15, 10, 0, 0, 0, 0, 0, 0, 0, 0, 'PERSPECTIVE', 'ORBIT', 'AMBIENT', 0, '/modelHtmlPoup/model.html?deviceName=YCZY-1&&deviceId=40197946', 759);
             setObjTransform('YCZY-11', false, 'position', [getObjTransform('YCZY1', false, 'position', 'x') + 10, getObjTransform('YCZY1', false, 'position', 'y'), getObjTransform('YCZY1', false, 'position', 'z') + 13], false);
             makeParent('YCZY-11', 'YCZY1');
             changeVis('YCZY-11', false);
             /* 创建交互ui2 */
-            createObject('PLANE_WITH_HTML', 'YCZY-22', 15, 10, 0, 0, 0, 0, 0, 0, 0, 0, 'PERSPECTIVE', 'ORBIT', 'AMBIENT', 0, '/src/views/modelHtmlPoup/model.html?deviceName=YCZY-2&&deviceId=40348239', 759);
+            createObject('PLANE_WITH_HTML', 'YCZY-22', 15, 10, 0, 0, 0, 0, 0, 0, 0, 0, 'PERSPECTIVE', 'ORBIT', 'AMBIENT', 0, '/modelHtmlPoup/model.html?deviceName=YCZY-2&&deviceId=40348239', 759);
             setObjTransform('YCZY-22', false, 'position', [getObjTransform('YCZY2', false, 'position', 'x') + 10, getObjTransform('YCZY2', false, 'position', 'y'), getObjTransform('YCZY2', false, 'position', 'z') + 10], false);
             makeParent('YCZY-22', 'YCZY2');
             changeVis('YCZY-22', false);
             /* 创建交互ui3 */
-            createObject('PLANE_WITH_HTML', 'YCZY-33', 15, 10, 0, 0, 0, 0, 0, 0, 0, 0, 'PERSPECTIVE', 'ORBIT', 'AMBIENT', 0, '/src/views/modelHtmlPoup/model.html?deviceName=YCZY-3&&deviceId=40348238', 1024);
+            createObject('PLANE_WITH_HTML', 'YCZY-33', 15, 10, 0, 0, 0, 0, 0, 0, 0, 0, 'PERSPECTIVE', 'ORBIT', 'AMBIENT', 0, '/modelHtmlPoup/model.html?deviceName=YCZY-3&&deviceId=40348238', 759);
             setObjTransform('YCZY-33', false, 'position', [getObjTransform('YCZY3', false, 'position', 'x') + 10, getObjTransform('YCZY3', false, 'position', 'y'), getObjTransform('YCZY3', false, 'position', 'z') + 10], false);
             makeParent('YCZY-33', 'YCZY3');
             changeVis('YCZY-33', false);

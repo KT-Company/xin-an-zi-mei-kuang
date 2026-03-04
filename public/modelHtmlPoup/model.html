@@ -17,14 +17,14 @@
             /* height: 100%; */
             z-index: 99;
             pointer-events: auto;
-            background: url('/src/assets/img/modelHtml/bg.png') no-repeat center center;
+            background: url('/assets/img/modelHtml/bg.png') no-repeat center center;
             background-size: cover;
             transition: background 0.3s ease;
             min-height: 506px;
         }
 
         .popup-container.alarm {
-            background: url('/src/assets/img/modelHtml/bg2.png') no-repeat center center;
+            background: url('/assets/img/modelHtml/bg2.png') no-repeat center center;
             background-size: cover;
         }
 
@@ -42,11 +42,11 @@
             color: #fff;
             width: 100%;
             height: 52px;
-            background: url('/src/assets/img/modelHtml/titleBg.png') no-repeat center center;
+            background: url('/assets/img/modelHtml/titleBg.png') no-repeat center center;
         }
 
         .model-card h2.alarm-title {
-            background: url('/src/assets/img/modelHtml/titleBg2.png') no-repeat center center;
+            background: url('/assets/img/modelHtml/titleBg2.png') no-repeat center center;
         } */
 
         .info-title {
@@ -56,7 +56,7 @@
             font-size: 28px;
             color: #fff;
             height: 52px;
-            background: url('/src/assets/img/modelHtml/titleBg.png') no-repeat center center;
+            background: url('/assets/img/modelHtml/titleBg.png') no-repeat center center;
             display: flex;
             align-items: center;
             justify-content: space-between; 
@@ -65,7 +65,7 @@
         }
 
         .info-title.alarm-title {
-            background: url('/src/assets/img/modelHtml/titleBg2.png') no-repeat center center;
+            background: url('/assets/img/modelHtml/titleBg2.png') no-repeat center center;
             background-size: cover;
         }
 
@@ -73,7 +73,7 @@
             width: 48px;
             height: 48px;
             margin-right: 20px;
-            background: url('/src/assets/img/modelHtml/close.png') no-repeat center center;
+            background: url('/assets/img/modelHtml/close.png') no-repeat center center;
             background-size: cover;
         }
 
@@ -90,7 +90,7 @@
         .info-item {
             width: 100%;
             height: 50px;
-            background: url('/src/assets/img/modelHtml/2.png') no-repeat center center;
+            background: url('/assets/img/modelHtml/2.png') no-repeat center center;
             background-size: cover;
             display: flex;
             align-items: center;
@@ -111,9 +111,8 @@
             color: #62EFD3;
         }
 
-        .info-item:last-child span:last-child.alarm-danger {
+        .info-item .alarm-danger {
             color: #FF6969 !important;
-            /* 报警状态：红色 */
         }
     </style>
 </head>
@@ -127,12 +126,12 @@
                     <div class="info-close"></div>
                 </div>
                 <div class="info-list">
-                    <div class="info-item" v-for="item in data.data" :key="item.title">
+                    <div class="info-item" v-for="(item, index) in data.data" :key="item.title" :class="{'alarm-danger': hasAlarm}">
                         <span>{{ item.title }}</span>
-                        <span v-if="index === data.data.length - 1" :class="{'alarm-danger': hasAlarm}">
+                        <span v-if="index === data.data.length - 1"  :class="{'alarm-danger': hasAlarm}">
                             {{ item.content }}
                         </span>
-                        <span v-else>{{ item.content }}</span>
+                        <span v-else >{{ item.content }}</span>
                     </div>
                 </div>
             </div>
@@ -176,17 +175,6 @@
 
         createApp({
             setup() {
-                const data = ref({
-                    title: '设备信息',
-                    data: [
-                        { title: '设备名称', content: '加载中...' },
-                        { title: '设备编号', content: '加载中...' },
-                        { title: '安装位置', content: '加载中...' },
-                        { title: '噪音大小', content: '加载中...' },
-                        { title: '报警状态', content: '加载中...' },
-                    ],
-                });
-
                 // 添加 hasAlarm 到响应式数据中
                 const hasAlarm = ref(false);
 
@@ -194,6 +182,14 @@
                 const id = getUrlParameter('deviceId');
                 const deviceName = getUrlParameter('deviceName');
 
+                const data = ref({
+                    title: '设备信息',
+                    data: [
+                        { title: '设备名称', content: id },
+                        { title: '设备编号', content: deviceName },
+                        { title: '报警状态', content: '--' }
+                    ],
+                });
                 // 请求设备数据
                 if (id) {
                     // 同时请求设备信息和所有实时数据

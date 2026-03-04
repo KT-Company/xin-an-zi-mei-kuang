@@ -181,6 +181,7 @@ const navEvent = (index, cRoute, n) => {
     console.error('无效的路由路径:', cRoute)
     return
   }
+  console.log('cRoute:', cRoute)
   emit('nav-change', cRoute.name || cRoute.path)
   console.log('当前路由-------:', cRoute.path)
   router.push(cRoute.path).catch((err) => {

@@ -26,7 +26,7 @@ export default defineConfig({
     vue({
       template: {
         compilerOptions: {
-          isCustomElement: tag => tag.startsWith('kt-cus-'),
+          isCustomElement: (tag) => tag.startsWith('kt-cus-'),
         },
       },
     }),
@@ -55,7 +55,7 @@ export default defineConfig({
       dts: path.resolve(
         path.resolve(__dirname, 'src'),
         'types', // 指定自动导入函数TS类型声明文件路径
-        'auto-imports.d.ts',
+        'auto-imports.d.ts'
       ),
       eslintrc: {
         enabled: true,
@@ -81,13 +81,14 @@ export default defineConfig({
       '/api': {
         target: 'http://127.0.0.1:3000',
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, ''),
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },
   // 定义全局常量替换方式
   define: insetLatestBuildTime(),
   build: {
+    sourcemap: true, // 开启
     outDir: `./dist/${formatted.value}-dist`,
     rollupOptions: {
       input: {

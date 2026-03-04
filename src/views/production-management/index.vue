@@ -46,6 +46,16 @@ const data = ref({
       icon1: 'bg-[url(@/assets/img/left3/4-1.png)]',
       icon2: 'bg-[url(@/assets/img/left3/4-2.png)]',
     },
+    其他附属设备: {
+      name: '其他附属设备',
+      active: false,
+      bg1: 'bg-[url(@/assets/img/left1/1.png)]',
+      bg2: 'bg-[url(@/assets/img/left1/1-c.png)]',
+      selected1: 'bg-[url(@/assets/img/left1/2.png)]',
+      selected2: 'bg-[url(@/assets/img/left1/2-c.png)]',
+      icon1: 'bg-[url(@/assets/img/left3/5-1.png)]',
+      icon2: 'bg-[url(@/assets/img/left3/5-2.png)]',
+    },
   },
 })
 

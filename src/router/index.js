@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory,createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
 
 const pages = import.meta.glob('../views/*/route.js', { eager: true, import: 'default' });
 const viewComponent = import.meta.glob('../views/*/index.vue');
@@ -7,7 +7,7 @@ let routes = Object.entries(pages).map(([path, meta]) => {
   const viewComponentKey = path.replace('route.js', 'index.vue');
   path = path.replace('../views', '').replace('/route.js', '');
   const name = path.split('/').filter(Boolean).join('-');
-  console.log("router---------",path, name);
+  console.log("router---------", path, name);
   // 根据menuOrder排序
   return {
     path,
@@ -28,5 +28,4 @@ routes.unshift({ path: '/', redirect: routes[0].path });
 export default createRouter({
   routes,
   history: createWebHashHistory(),
-  //  history: createWebHistory(),
 });
